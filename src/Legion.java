@@ -25,7 +25,7 @@ public class Legion extends WorldUnit implements Renderable{
 	}
 	
 	public void tick(InputHandler input,World world){
-//		if (energy>0){
+		if (energy>0){
 			int mx = 0;
 			int my = 0;
 			if (input.up.down) my = -1;
@@ -33,16 +33,16 @@ public class Legion extends WorldUnit implements Renderable{
 			if (input.left.down) mx = -1;
 			if (input.right.down) mx = 1;
 			moveLegion(mx,my,world);
-//			energy--;
-//		}
+		}
 	}
 	
 	public void moveLegion(int mx,int my, World world){
-		if (world.isValidToPlace(mx+x, my+y)){
+		if (world.isValidToMove(mx+x, my+y)){
 			x+=mx;
 			y+=my;
 			player.updateHash();
-			System.out.println("Moved!");
+			System.out.println(energy);
+			energy--;
 		}
 	}
 	

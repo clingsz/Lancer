@@ -22,6 +22,11 @@ public class Terrian implements Renderable{
 		if (id==grass.id) return true;
 		return false;
 	}
+	
+	public boolean isValidToMove(){
+		if (id!=water.id) return true;
+		return false;
+	}
 		
 	public byte id = 0;
 	

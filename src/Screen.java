@@ -15,7 +15,7 @@ public class Screen {
 		this.w = w;
 		this.h = h;
 		this.image = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
-		this.g = image.getGraphics(); 
+		this.g = image.getGraphics();
 		imageSheet.init();
 	}
 	public void clear(Color c) {
@@ -37,10 +37,10 @@ public class Screen {
 		g.drawImage(imageSheet.getImage(name),xp,yp,sizeX,sizeY, null);
 	}
 	public void render(int xp, int yp, String dispString) {
-		this.render(xp, yp, dispString, 14);
+		this.render(xp, yp, dispString, 12);
 	}
 	public void render(int xp, int yp, String dispString,int Fontsize) {
-		Font myFont = new Font("Serif", Font.BOLD, Fontsize);
+		Font myFont = new Font("Arial", Font.PLAIN, Fontsize);
 		g.setFont(myFont);
 		g.drawString(dispString, xp, yp);
 	}

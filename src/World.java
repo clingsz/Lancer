@@ -29,6 +29,8 @@ public class World{
 	int focusX,focusY;
 	public GameState gameState = new GameState(1);
 	
+	public WorldUnit selectedUnit = null;
+	
 	public World(){
 
 	}
@@ -68,8 +70,15 @@ public class World{
 		if (this.getUnitAt(x,y)!=null) return false;
 		if (getTerrianAt(x,y).isValidToPut()) return true;
 		return false;
-		
 	}
+	
+	public boolean isValidToMove(int x, int y){
+		if (!isInWorld(x,y)) return false;
+		if (this.getUnitAt(x,y)!=null) return false;
+		if (getTerrianAt(x,y).isValidToMove()) return true;
+		return false;
+	}
+
 	
 	public boolean isInWorld(int tx, int ty){
 		if (tx<0 || tx>=Width || ty<0 || ty>=Height) return false;
@@ -138,6 +147,11 @@ public class World{
 		
 //		 render controlInfo
 		screen.render(getShowX(focusX), getShowY(focusY), size,"choice");
+		
+//		 render selectedUnit
+		if (gameState.id==2){
+			this.selectedUnit.renderSelected(screen,this);
+		}
 	}
 	
 	
@@ -222,15 +236,11 @@ public class World{
 		if (gameState.id==1){
 			int mx = 0;
 			int my = 0;
-//			if (input.up.clicked) my = -1;
-//			if (input.down.clicked) my = 1;
-//			if (input.left.clicked) mx = -1;
-//			if (input.right.clicked) mx = 1;
 
-					if (input.up.down) my = -1;
-					if (input.down.down) my = 1;
-					if (input.left.down) mx = -1;
-					if (input.right.down) mx = 1;
+			if (input.up.down) my = -1;
+			if (input.down.down) my = 1;
+			if (input.left.down) mx = -1;
+			if (input.right.down) mx = 1;
 			moveFocus(mx,my);
 			if (input.home.clicked) {
 				Point np = gameState.currentPlayer.getHome();
@@ -240,6 +250,7 @@ public class World{
 			if (input.select.clicked){
 				if (this.getUnitAtFocus().player==gameState.currentPlayer){
 					gameState.setState(GameState.unitchoice);
+					this.selectedUnit = this.getUnitAtFocus();
 				}
 			}
 			if (input.next.clicked){
@@ -248,12 +259,14 @@ public class World{
 		}
 		if (gameState.id==2){
 			if (input.cancel.clicked){
+				selectedUnit = null;
 				gameState.setState(GameState.worldbrowse);
 			}
-			this.getUnitAtFocus().tick(input,this);
+			else{
+				this.selectedUnit.tick(input,this);
+				setFocus(this.selectedUnit.x,this.selectedUnit.y);
+			}
 		}
-		
-		
 	}
 	
 	public void nextDay(){
@@ -264,6 +277,13 @@ public class World{
 		for(Player p : players){
 			p.nextDay();
 		}
+	}
+	
+	public void setFocus(int x, int y){
+		if (isValid(x,y)) {
+			focusX = x; focusY = y;
+		}
+		resetScreenPosition();
 	}
 	
 	public void moveFocus(int dx, int dy){

@@ -35,9 +35,10 @@ public class ImageSheet {
 			Image imgChoice = new ImageIcon("res/pic/choice.jpg").getImage();
 			ImageBase.put("choice",IM.getAlpha(imgChoice));
 			Image imgCalendar = new ImageIcon("res/pic/calendar.jpg").getImage();
-			ImageBase.put("calendar",imgCalendar);
+			ImageBase.put("calendar",IM.getAlpha(imgCalendar));
 			ImageBase.put("food",new ImageIcon("res/pic/food.jpg").getImage());
 			ImageBase.put("population",new ImageIcon("res/pic/population.jpg").getImage());
+			ImageBase.put("selected",IM.getAlpha(new ImageIcon("res/pic/selected.jpg").getImage()));
 		}
 		catch (Exception e){
 			e.printStackTrace();

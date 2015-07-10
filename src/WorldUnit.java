@@ -5,14 +5,14 @@ import java.util.ArrayList;
 public abstract class WorldUnit {
 	public int x,y;
 	public Player player;
-	public int energy = 1;
+	public int energy = 10;
 	public ArrayList<Squad> squads = new ArrayList<Squad>();
 	public int food = 1000;
 	public WorldUnit(Player p, Point np){
 		x = np.x;
 		y = np.y;
 		player = p;
-		energy = 1;
+		energy = 10;
 	}
 	public String getImageString(){
 		return null;
@@ -40,10 +40,10 @@ public abstract class WorldUnit {
 		
 
 		cp.drawImage(screen,cp.unitPosX,cp.unitPosY+1,"food");
-		cp.drawString(screen,cp.unitPosX+0.8,cp.unitPosY+1,NumberFormatter.format(food),15);
+		cp.drawString(screen,cp.unitPosX+0.8,cp.unitPosY+1,NumberFormatter.format(food));
 		
 		cp.drawImage(screen,cp.unitPosX+2,cp.unitPosY+1,"infantry"+player.id);
-		cp.drawString(screen,cp.unitPosX+2.8,cp.unitPosY+1,NumberFormatter.format(this.getSoldierNum()),15);
+		cp.drawString(screen,cp.unitPosX+2.8,cp.unitPosY+1,NumberFormatter.format(this.getSoldierNum()));
 		
 		
 		int c = 0;
@@ -55,5 +55,9 @@ public abstract class WorldUnit {
 			cp.drawImage(screen,cp.unitPosX+x,cp.unitPosY+5+y,s.getImageString());
 			cp.drawString(screen,cp.unitPosX+x+0.3,cp.unitPosY+5+y+0.3,s.getSoldierNum()+"",12);
 		}
+	}
+	
+	public void renderSelected(Screen screen, World w){
+		screen.render(w.getShowX(x), w.getShowY(y), w.size, "selected");
 	}
 }
