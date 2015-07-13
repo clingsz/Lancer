@@ -1,0 +1,26 @@
+Developer Log Record,
+Erwin, 
+The Lancer Game
+
+
+
+Jul,13,2015
+
+Free change before got other works to do.
+
+Current developments:
+1. Battle method
+2. Properties design for soldiers
+3. Hero system
+
+Do I want to change the font to pixel fonts?
+Want to make a specific style for my arts, like square style
+
+The menu system
+
+Let's try some simple versions first
+probably
+
+
+
+

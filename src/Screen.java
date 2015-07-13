@@ -44,6 +44,7 @@ public class Screen {
 		this.render(xp, yp, dispString, 12);
 	}
 	public void render(int xp, int yp, String dispString,int Fontsize) {
+		g.setColor(Color.BLACK);
 		Font myFont = new Font("Arial", Font.PLAIN, Fontsize);
 		g.setFont(myFont);
 		g.drawString(dispString, xp, yp);

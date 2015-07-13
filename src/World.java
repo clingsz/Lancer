@@ -28,7 +28,7 @@ public class World{
 	Date date;
 	int focusX,focusY;
 	public GameState gameState = new GameState(1);
-	
+	public Menu legionMenu = new LegionMenu();
 	public WorldUnit selectedUnit = null;
 	
 	public World(){
@@ -154,6 +154,10 @@ public class World{
 		if (gameState.id==2){
 			this.selectedUnit.renderSelected(screen,this);
 		}
+		
+		if (currentMenu!=null){
+			currentMenu.render(screen);
+		}
 	}
 	
 	
@@ -234,6 +238,8 @@ public class World{
 		return false;
 	}
 	
+	public Menu currentMenu = null;
+	
 	public void tick(){
 		if (gameState.id==1){
 			int mx = 0;
@@ -260,13 +266,17 @@ public class World{
 			}
 		}
 		if (gameState.id==2){
+			
 			if (input.cancel.clicked){
 				selectedUnit = null;
 				gameState.setState(GameState.worldbrowse);
+				currentMenu = null;
 			}
 			else{
-				this.selectedUnit.tick(input,this);
-				setFocus(this.selectedUnit.x,this.selectedUnit.y);
+				currentMenu = legionMenu;
+				legionMenu.tick(input, this);
+//				this.selectedUnit.tick(input,this);
+//				setFocus(this.selectedUnit.x,this.selectedUnit.y);
 			}
 		}
 	}
