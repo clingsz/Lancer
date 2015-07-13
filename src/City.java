@@ -29,10 +29,10 @@ public class City extends WorldUnit implements Renderable{
 	public void renderInfo(Screen screen, ControlPanel cp){
 		super.renderInfo(screen, cp);
 				
-		cp.drawImage(screen,cp.unitPosX,cp.unitPosY,getImageString());
-		cp.drawString(screen,cp.unitPosX+1,cp.unitPosY,cityName+" City");
+		cp.drawImage(screen,1,1,getImageString());
+		cp.drawString(screen,0,2,cityName+" City");
 		
-		cp.drawImage(screen,cp.unitPosX+4,cp.unitPosY+1,"population");
-		cp.drawString(screen,cp.unitPosX+5,cp.unitPosY+1,NumberFormatter.format(population));
+		cp.drawImage(screen,6,2,"population");
+		cp.drawString(screen,7,2,NumberFormatter.format(population));
 	}
 }

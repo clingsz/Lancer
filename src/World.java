@@ -24,7 +24,7 @@ public class World{
 	public Terrian terrian[][]; //0 for blank, 1 for bubble, 2 for base, -1 for block
 	public ArrayList<Player> players;
 	public int size;
-	DateFormat dateformat = DateFormat.getDateInstance(DateFormat.LONG, Locale.ENGLISH);
+	DateFormat dateformat = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.ENGLISH);
 	Date date;
 	int focusX,focusY;
 	public GameState gameState = new GameState(1);
@@ -60,11 +60,14 @@ public class World{
 		for (int i = 0; i<2;i++){
 			players.add(new Player(this));
 		}
-		size = 20;
+		size = 30;
 		focusX = players.get(1).cities.get(0).x;
 		focusY = players.get(1).cities.get(0).y;
 		gameState.setCurrentPlayer(players.get(1));
+		screenXOFFSET = 0;
+		screenYOFFSET = 0;
 	}
+	
 	public boolean isValidToPlace(int x, int y){
 		if (!isInWorld(x,y)) return false;
 		if (this.getUnitAt(x,y)!=null) return false;
@@ -90,8 +93,8 @@ public class World{
 	}
 	
 	public boolean shouldDisplay(Screen screen, int x, int y){
-		int sw = screen.w;
-		int sh = screen.h;
+		int sw = screen.WORLDWIDTH;
+		int sh = screen.WORLDHEIGHT;
 		if (x<screenX || x>screenX+sw/size || y<screenY || y>screenY+sh/size) return false;
 		return true;
 	}
@@ -103,7 +106,7 @@ public class World{
 	}
 	
 	public int getShowY(int y){
-		return (y-screenY)*size;
+		return screenYOFFSET + (y-screenY)*size;
 	}
 	
 	public Point genRandValidLocation(){
@@ -124,20 +127,19 @@ public class World{
 		return RandGen.getRandomNumber(0, Height-1);
 	}
 	
-	public int screenXOFFSET;
+	public int screenXOFFSET,screenYOFFSET;
 	public int showWidth,showHeight;
 	
-	public void render(Screen screen, int left){
-		screenXOFFSET = left;
-		int sw = screen.w - left;
-		int sh = screen.h;
+	public void render(Screen screen){
+		int sw = screen.WORLDWIDTH;
+		int sh = screen.WORLDHEIGHT;
 		// render blocks
 		for (int x = 0; x<=sw/size; x++)
 			for (int y = 0; y<=sh/size; y++){
 				int tx = screenX+x;
 				int ty = screenY+y;
 				if (isInWorld(tx,ty)){
-					terrian[tx][ty].render(screen, left+x*size, y*size, size);
+					terrian[tx][ty].render(screen, screenXOFFSET+x*size, screenYOFFSET+y*size, size);
 				}
 			}
 		// render units
@@ -164,7 +166,7 @@ public class World{
 	}
 	
 	public String getFocusString(){
-		return ("("+focusX+","+focusY+")");
+		return ("("+focusX+","+focusY+") " + getFocusTerrian().getTerrianName());
 	}
 	
 	public WorldUnit getUnitAtFocus(){
@@ -208,8 +210,8 @@ public class World{
 			}
 		}
 		img.setRGB(0, 0, w, h, pixels, 0, w);
-		showWidth = (screen.w-controlPanel.Width)/size;
-		showHeight = (screen.h)/size;
+		showWidth = (screen.WORLDWIDTH)/size;
+		showHeight = (screen.WORLDHEIGHT)/size;
 		img.getGraphics().drawRect(screenX, screenY, showWidth, showHeight);
 		return img;
 	}

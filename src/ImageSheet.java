@@ -8,8 +8,8 @@ public class ImageSheet {
 	//Terrain
 	//Unit
 	HashMap<String,Image> ImageBase = new HashMap<String,Image>();
+	ImageMaker IM = new ImageMaker();
 	public void init(){
-		ImageMaker IM = new ImageMaker();
 		Image img = null;
 		try{
 			for(int i = 0 ; i < Terrian.names.length; i++){
@@ -39,6 +39,7 @@ public class ImageSheet {
 			ImageBase.put("food",new ImageIcon("res/pic/food.jpg").getImage());
 			ImageBase.put("population",new ImageIcon("res/pic/population.jpg").getImage());
 			ImageBase.put("selected",IM.getAlpha(new ImageIcon("res/pic/selected.jpg").getImage()));
+			addImage("energy");
 		}
 		catch (Exception e){
 			e.printStackTrace();
@@ -47,6 +48,15 @@ public class ImageSheet {
 //		img = IM.getAlpha(imgRoad0);
 //		img = IM.getRotate(img[1]);
 	}
+	
+	public void addImage(String name){
+		ImageBase.put(name,new ImageIcon("res/pic/"+name+".jpg").getImage());
+	}
+	
+	public void addImageAlpha(String name){
+		ImageBase.put(name,IM.getAlpha(new ImageIcon("res/pic/"+name+".jpg").getImage()));
+	}
+	
 	public Image getImage(String name){
 		Image img = ImageBase.get(name); 
 		if (img!=null){

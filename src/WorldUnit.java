@@ -36,24 +36,26 @@ public abstract class WorldUnit {
 	}
 	
 	public void renderInfo(Screen screen, ControlPanel cp){
-		cp.drawString(screen,cp.unitPosX,cp.unitPosY-1,player.name + " Family");
+		cp.drawString(screen,0,0,player.name + " Family");
 		
-
-		cp.drawImage(screen,cp.unitPosX,cp.unitPosY+1,"food");
-		cp.drawString(screen,cp.unitPosX+0.8,cp.unitPosY+1,NumberFormatter.format(food));
+		cp.drawImage(screen,4,0,"food");
+		cp.drawString(screen,5,0,NumberFormatter.format(food));
 		
-		cp.drawImage(screen,cp.unitPosX+2,cp.unitPosY+1,"infantry"+player.id);
-		cp.drawString(screen,cp.unitPosX+2.8,cp.unitPosY+1,NumberFormatter.format(this.getSoldierNum()));
+		cp.drawImage(screen,4,1,"infantry"+player.id);
+		cp.drawString(screen,5,1,NumberFormatter.format(this.getSoldierNum()));
+		
+		cp.drawImage(screen,4,2,"energy");
+		cp.drawString(screen,5,2,energy+"");
 		
 		
 		int c = 0;
 		int COL = 6;
 		for (Squad s:squads){
 			int x = c%COL;
-			double y = (c/COL)*1.2;
+			double y = (c/COL);
 			c++;
-			cp.drawImage(screen,cp.unitPosX+x,cp.unitPosY+5+y,s.getImageString());
-			cp.drawString(screen,cp.unitPosX+x+0.3,cp.unitPosY+5+y+0.3,s.getSoldierNum()+"",12);
+			cp.drawImage(screen,10+x*1.2,y,s.getImageString());
+			cp.drawString(screen,10.5+x*1.2,y+0.3,s.getSoldierNum()+"");
 		}
 	}
 	

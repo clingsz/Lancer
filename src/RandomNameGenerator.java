@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 
 public class RandomNameGenerator {
-	public static String[] fileNames = {"first-names","names","places"};
+	public static String[] fileNames = {"first-names","last-names","places"};
 	public static String firstNames[];
 	public static String lastNames[];
 	public static String placeNames[];
@@ -25,9 +25,10 @@ public class RandomNameGenerator {
 			names = new String[L+1];
 			Scanner s = new Scanner(f1);
 			int cnt = 0;
-			while(s.hasNext()){
+			while(s.hasNextLine()){
 //				System.out.println(cnt + "," + L);
-				names[cnt++] = s.nextLine();
+				names[cnt] = s.nextLine();
+				cnt = cnt + 1;
 			}
 			s.close();
 		} catch (IOException e) {
@@ -70,6 +71,7 @@ public class RandomNameGenerator {
 		int cnt = 0;
 		while(cnt++<10){
 			for(int i = 0 ; i < 3;i ++){
+//			int i = 1;
 				System.out.println(fileNames[i] + " : " +RandomNameGenerator.getRandName(i));
 			}
 		}

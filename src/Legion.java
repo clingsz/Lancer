@@ -48,12 +48,8 @@ public class Legion extends WorldUnit implements Renderable{
 	
 	public void renderInfo(Screen screen, ControlPanel cp){
 		super.renderInfo(screen, cp);
-		cp.drawImage(screen,cp.unitPosX,cp.unitPosY,getImageString());
-		cp.drawString(screen,cp.unitPosX+1,cp.unitPosY,general.lastName + " Legion");
-//		cp.drawImage(screen,cp.unitPosX,cp.unitPosY+1,"food");
-//		cp.drawString(screen,cp.unitPosX+1,cp.unitPosY+1, NumberFormatter.format(food));
-		
-		
+		cp.drawImage(screen,1,1,getImageString());
+		cp.drawString(screen,0,2,general.lastName + " Legion");				
 	}
 	
 }

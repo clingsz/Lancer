@@ -18,8 +18,8 @@ public class Game extends Canvas implements Runnable{
 	private static final long serialVersionUID = 1L;
 	private Random random = new Random();
 	public static final String NAME = "Lancer";
-	public static final int HEIGHT = 400;
-	public static final int WIDTH = 800;
+	public static final int HEIGHT = 480;
+	public static final int WIDTH = 640;
 	private static final int SCALE = 1;
 
 	private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
@@ -32,8 +32,8 @@ public class Game extends Canvas implements Runnable{
 	boolean running = false;	
 	
 	private void init() {
-		screen = new Screen(WIDTH, HEIGHT);
-		controlPanel.init(WIDTH/5, HEIGHT);
+		screen = new Screen(WIDTH, HEIGHT,HEIGHT*3/4);
+		controlPanel.init(WIDTH, HEIGHT/4,HEIGHT);
 		resetGame();
 	}
 
@@ -112,8 +112,8 @@ public class Game extends Canvas implements Runnable{
 			requestFocus();
 			return;
 		}
+		world.render(screen);
 		controlPanel.render(screen, world);
-		world.render(screen,controlPanel.Width);
 		
 		Graphics g = bs.getDrawGraphics();
 		g.fillRect(0, 0, getWidth(), getHeight());

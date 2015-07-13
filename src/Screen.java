@@ -7,16 +7,20 @@ import java.awt.image.BufferedImage;
 
 public class Screen {
 	int w,h;
+	int WORLDHEIGHT;
+	int WORLDWIDTH;
 	BufferedImage image; 
 	Graphics g;
 	int[] pixels;
 	ImageSheet imageSheet = new ImageSheet();
-	public Screen(int w, int h){
+	public Screen(int w, int h, int WORLDHEIGHT){
 		this.w = w;
 		this.h = h;
 		this.image = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
 		this.g = image.getGraphics();
 		imageSheet.init();
+		this.WORLDHEIGHT = WORLDHEIGHT;
+		this.WORLDWIDTH = w;
 	}
 	public void clear(Color c) {
 		g.setColor(c);
