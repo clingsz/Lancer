@@ -26,10 +26,12 @@ public class Player{
 	
 	public HashMap<Point,WorldUnit> hashTable = new HashMap<Point,WorldUnit>();
 	
-	public Player(World world){
+	public HashMap<Point,Legion> hashLegion = new HashMap<Point,Legion>();
+	public HashMap<Point,City> hashCity = new HashMap<Point,City>();
+	
+	public Player(World world,int id){
 		name = RandomNameGenerator.getLastName();
-		id = playerCount;
-		playerCount++;
+		this.id = id;
 		color = playerColor[id];
 		RandGenCity(world);
 		if (id==0){
@@ -59,20 +61,26 @@ public class Player{
 	public void addNewCity(City newCity){
 		cities.add(newCity);
 		hashTable.put(new Point(newCity.x,newCity.y), newCity);
+		hashCity.put(new Point(newCity.x,newCity.y), newCity);
 	}
 	
 	public void addNewLegion(Legion newLegion){
 		legions.add(newLegion);
 		hashTable.put(new Point(newLegion.x,newLegion.y), newLegion);
+		hashLegion.put(new Point(newLegion.x,newLegion.y), newLegion);
 	}
 	
 	public void updateHash(){
 		hashTable.clear();
+		hashCity.clear();
+		hashLegion.clear();
 		for (City c: cities){
 			hashTable.put(new Point(c.x,c.y), c);
+			hashCity.put(new Point(c.x,c.y), c);
 		}
 		for (Legion c: legions){
 			hashTable.put(new Point(c.x,c.y), c);
+			hashLegion.put(new Point(c.x,c.y), c);
 		}
 	}
 	
@@ -96,6 +104,14 @@ public class Player{
 		return (hashTable.get(new Point(x,y)));
 	}
 	
+	public City getCityAt(int x, int y){
+		return (hashCity.get(new Point(x,y)));
+	}
+	
+	public Legion getLegionAt(int x, int y){
+		return (hashLegion.get(new Point(x,y)));
+	}
+	
 	public boolean isNeutral(){
 		return neutral;
 	}
@@ -109,21 +125,6 @@ public class Player{
 	public boolean isFriend(Player p){
 		if (p==this) return true;
 		return false;
-	}
-
-	
-	public void render(Screen screen, World world) {
-		for(City c : cities){
-			if (world.shouldDisplay(screen, c)){
-				c.render(screen,world.getShowX(c.x), world.getShowY(c.y), world.size);
-			}
-		}
-		
-		for(Legion l : legions){
-			if (world.shouldDisplay(screen, l)){
-				l.render(screen,world.getShowX(l.x), world.getShowY(l.y), world.size);
-			}
-		}
 	}
 	
 }

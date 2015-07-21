@@ -1,31 +1,31 @@
 package mainrun;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import element.City;
+import element.Legion;
 import element.Player;
 import element.World;
-
 import screen.CityMenu;
-import screen.ControlPanel;
 import screen.LegionMenu;
 import screen.Menu;
-import screen.Screen;
 import screen.StartMenu;
+import screen.Viewer;
 import screen.WorldMenu;
+
 
 
 public class GameState {
 	
 	public World world = new World();
-	ControlPanel controlPanel = new ControlPanel(); 
 	public InputHandler input;
-	
-	public Menu legionMenu = new LegionMenu();
-	public Menu cityMenu = new CityMenu();
-	public Menu startMenu = new StartMenu();
-	public Menu worldMenu = new WorldMenu();
-	
+	public Viewer viewer;
+		
 	int id;
 	
+	public boolean worldBrowsing = false;
+	public boolean showMenu = false;
 	
 	public GameState(InputHandler input2){
 		this.input = input2;
@@ -44,62 +44,109 @@ public class GameState {
 		battleBrowsing
 	};
 	
+	public Menu menu = null;
 	
-	public void init(Screen screen){
-		state = State.startMenu;
-		controlPanel.init(screen);
+	public void init(int w, int h){
+		viewer = new Viewer(w,h);
+		setMenu(new StartMenu());
 	}
 		
 	public void resetGame(){
-		world.init(64, 64, input);
+		world.init(128, 128, input);
+		viewer.init(world);
+		clearMenu();
 	}
 	
+	public void clearMenu(){
+		menu = null;
+	}
+	
+	public BufferedImage getImage(){
+		return viewer.getImage();
+	}
+	
+	public void render(){
+		if (!(menu instanceof StartMenu))
+		{
+			viewer.render(world);
+		}
+		if (menu!=null){
+			viewer.renderMenu(menu);
+		}
+	}
+
+	Legion legion = null;
+	public void moveLegion(Legion legion){
+		clearMenu();
+		this.legion = legion;
+	}
 
 	public void tick(){
-		if (state == State.startMenu){
-			startMenu.tick(this,input);
+		if (menu!=null){
+			menu.tick();
 		}
-		else if (state == State.worldBrowsing){
-			world.tick(this);
+		else if (legion!=null){
+			int mx = 0;
+			int my = 0;
+			if (input.up.clicked) my = -1;
+			if (input.down.clicked) my = 1;
+			if (input.left.clicked) mx = -1;
+			if (input.right.clicked) mx = 1;
+			if (mx!=0 || my!=0){
+				legion.moveLegion(mx, my, world);
+				viewer.setFocus(world, legion.x, legion.y);
+			}
+			if (input.enter.clicked){
+				legion = null;
+				viewer.clearSelection();
+				setMenu(new WorldMenu());
+			}
+			if (input.cancel.clicked){
+				legion = null;
+				viewer.clearSelection();
+			}
+			if (input.next.clicked){
+				legion = null;
+				viewer.clearSelection();
+				world.nextDay();
+			}
+			if (input.select.clicked){
+				setMenu(new LegionMenu(legion));
+				legion = null;
+			}
 		}
-		else if (state == State.worldMenu){
-			worldMenu.tick(this, input);
-		}
-		else if (state == State.legionMenu){
-			legionMenu.tick(this, input);
-		}
-		else if (state == State.cityMenu){
-			cityMenu.tick(this, input);
+		else{	
+			int mx = 0;
+			int my = 0;
+			if (input.up.down) my = -1;
+			if (input.down.down) my = 1;
+			if (input.left.down) mx = -1;
+			if (input.right.down) mx = 1;
+			if (input.enter.clicked) this.setMenu(new WorldMenu());
+			viewer.moveFocus(world,mx,my);
+			if (input.select.clicked && viewer.canSelectFocus(world.currentPlayerID)){
+				viewer.selectUnit();
+				viewer.render(world);
+				if (viewer.selectedUnit instanceof City){
+					setMenu(new CityMenu((City)viewer.selectedUnit));
+				}
+				else{
+					setMenu(new LegionMenu((Legion)viewer.selectedUnit));
+				}
+			}
+			if (input.next.clicked){
+				world.nextDay();
+			}
 		}
 	}
 	
-	public void render(Screen screen){
-		if (state == State.startMenu){
-			startMenu.render(screen);			
-		}
-		else if (state == State.worldBrowsing){
-			world.render(screen);
-			controlPanel.render(screen, world);
-		}
-		else if (state == State.worldMenu){
-			world.render(screen);
-			controlPanel.render(screen, world);
-			worldMenu.render(screen);
-		}
-		else if (state == State.legionMenu){
-			world.render(screen);
-			controlPanel.render(screen, world);
-			legionMenu.render(screen);
-		}
-		else if (state == State.cityMenu){
-			world.render(screen);
-			controlPanel.render(screen, world);
-			cityMenu.render(screen);
-		}
+	public void setMenu(Menu m){
+		this.menu = m;
+		m.init(input, this);
 	}
 	
-	public boolean checkOK(){
-		
+	public void endGame(){
+		System.exit(0);
 	}
 	
 }

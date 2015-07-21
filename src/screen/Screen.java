@@ -8,20 +8,20 @@ import java.awt.image.BufferedImage;
 
 public class Screen {
 	int w,h;
-	public int WORLDHEIGHT;
-	public int WORLDWIDTH;
+//	public int WORLDHEIGHT;
+//	public int WORLDWIDTH;
 	public BufferedImage image; 
 	Graphics g;
 	int[] pixels;
 	ImageSheet imageSheet = new ImageSheet();
-	public Screen(int w, int h, int WORLDHEIGHT){
+	public Screen(int w, int h){
 		this.w = w;
 		this.h = h;
 		this.image = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
 		this.g = image.getGraphics();
 		imageSheet.init();
-		this.WORLDHEIGHT = WORLDHEIGHT;
-		this.WORLDWIDTH = w;
+//		this.WORLDHEIGHT = WORLDHEIGHT;
+//		this.WORLDWIDTH = w;
 	}
 	public void clear(Color c) {
 		g.setColor(c);

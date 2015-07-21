@@ -7,37 +7,22 @@ import element.World;
 
 
 public class LegionMenu extends Menu {
-
-	public LegionMenu(){
+	private Legion legion;
+	public LegionMenu(Legion legion){
 		String[] str = {"Move","Stay","Info","Back"}; 
-		super.init(str);
+		super.setOptions(str);
+		this.legion = legion;
 	}
-	
-	
-	public void workOnChoice(GameState g){
-		Legion l = (Legion) g.world.selectedUnit;
-		if (selection==0){
-			
-		}
-		else if (selection==1){
-			if (g.checkOK()){
-				l.stay();
-			}
-			else{
-				workOnCancel(g);
-			}
-		}
-		else if (selection==2){
-			
-		}
-		if (selection==3){
-			workOnCancel(g);
+
+	public void doOption(){
+		switch(selection){
+		case 0: if (legion.canMove()) gameState.moveLegion(legion); break;
+		case 1: break;
+		case 3: doCancel(); break;
 		}
 	}
 	
-	public void workOnCancel(GameState g){
-		g.world.clearSelection();
-		g.state = State.worldBrowsing;
+	public void doCancel(){
+		gameState.clearMenu(); gameState.viewer.clearSelection();
 	}
-	
 }

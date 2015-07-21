@@ -1,15 +1,11 @@
 package screen;
-import mainrun.GameState;
-import mainrun.GameState.State;
-import mainrun.InputHandler;
-import element.World;
 
 
 public class StartMenu extends Menu {
 
 	public StartMenu(){
 		String[] str = {"New Game","Load Game","About","Options","Exit"};
-		super.init(str);
+		super.setOptions(str);
 		size = 50;
 	}
 	
@@ -24,16 +20,12 @@ public class StartMenu extends Menu {
 			screen.render(screen.w/3,screen.h/3 + (int)(size*(1.2*i)), showstr,30);
 		}
 	}
-		
-	public void workOnChoice(GameState g){
-		if (selection==0){
-			g.resetGame();
-			g.state = State.worldBrowsing;
-		}
-	}
 	
-	public void workOnCancel(){
-		
+	public void doOption(){
+		switch(selection){
+		case 0: gameState.resetGame(); break;
+		case 4: gameState.endGame(); break;
+		}
 	}
 	
 }

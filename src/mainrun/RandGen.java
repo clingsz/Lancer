@@ -13,6 +13,9 @@ public class RandGen {
 	public static int getRandomNumber(int a, int b){
 	    return (int)(a+Math.round(Math.random()*(b-a)));
 	}
+	public static double getRandomDouble(double b){
+		return Math.random()*b;
+	}
 	public static void main(String args[]){
 		for (int i = 1;i<50;i++)
 		System.out.print(getRandomNumber(4,10));

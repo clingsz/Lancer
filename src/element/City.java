@@ -1,16 +1,19 @@
 package element;
 
 import java.awt.Point;
+import java.util.Random;
 
 import mainrun.NumberFormatter;
+import mainrun.RandGen;
 import mainrun.RandomNameGenerator;
 
 import screen.ControlPanel;
 import screen.Screen;
 
 
-public class City extends WorldUnit implements Renderable{
+public class City extends WorldUnit{
 	public int population;
+	public static int MAXPOPULATION = 10000;
 	public String cityName; 
 	public City(Player p,Point np){
 		super(p, np);
@@ -18,9 +21,6 @@ public class City extends WorldUnit implements Renderable{
 		food = 500;
 		cityName = RandomNameGenerator.getPlaceName();
 		squads.add(new Squad(p));
-	}
-	public void render(Screen screen, int xp, int yp, int size) {
-		screen.render(xp, yp, size, "city"+player.id);
 	}
 	
 	public String getImageString(){
@@ -32,15 +32,31 @@ public class City extends WorldUnit implements Renderable{
 	public void nextDay(){
 		food+=population/2;
 		super.nextDay();
+		if (food>maxFood()) food = maxFood();
+		energy = 10000;
+		breed();
 	}
 	
-	public void renderInfo(Screen screen, ControlPanel cp){
-		super.renderInfo(screen, cp);
-				
-		cp.drawImage(screen,1,1,getImageString());
-		cp.drawString(screen,0,2,cityName+" City");
-		
-		cp.drawImage(screen,6,2,"population");
-		cp.drawString(screen,7,2,NumberFormatter.format(population));
+	public boolean recruit(int t){
+		if (food<Squad.squadPrice(t) | population<Squad.MAXNUM) return false;
+		food-=Squad.squadPrice(t);
+		population-=Squad.MAXNUM;
+		squads.add(new Squad(player,t));
+		energy--;
+		return true;
+	}
+	
+	public String getPopulationNumString(){
+		return NumberFormatter.format(population);
+	}
+	
+	public int maxFood(){
+		return population*10;
+	}
+	
+	public void breed(){
+		population*=1+RandGen.getRandomDouble(0.1)*(food/maxFood());
+		if (population>MAXPOPULATION)
+			population = MAXPOPULATION;
 	}
 }

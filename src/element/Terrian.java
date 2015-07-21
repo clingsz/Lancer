@@ -2,7 +2,7 @@ package element;
 import screen.Screen;
 
 
-public class Terrian implements Renderable{
+public class Terrian{
 	// water, grass, forest, hill, sand.
 	public static String[] names = {"void","water","grass","forest",
 		"hill","sand"};
@@ -45,7 +45,4 @@ public class Terrian implements Renderable{
 		return names[id];
 	}
 	
-	public void render(Screen screen, int xp, int yp, int size){
-		screen.render(xp, yp, size, names[id]);
-	}
 }

@@ -31,19 +31,15 @@ public class Game extends Canvas implements Runnable{
 	
 	InputHandler input = new InputHandler(this);
 	GameState gameState = new GameState(input);
-	Screen screen;
 	boolean running = false;	
 	
-	private void init() {
-		screen = new Screen(WIDTH, HEIGHT,HEIGHT*3/4);
-		gameState.init(screen);
-	}
 	
 	public void stop(){
 		running = false;
 	}
 	
 	public void start(){
+		gameState.init(WIDTH,HEIGHT);
 		running = true;
 		new Thread(this).start();
 	}
@@ -56,8 +52,6 @@ public class Game extends Canvas implements Runnable{
 		int frames = 0;
 		int ticks = 0;
 		long lastTimer1 = System.currentTimeMillis();
-
-		init();
 
 		while (running) {
 			long now = System.nanoTime();
@@ -98,8 +92,6 @@ public class Game extends Canvas implements Runnable{
 			input.tick();
 			gameState.tick();
 		}		
-//		if (input.next.down){
-//		}
 	}
 	
 	public void render(){
@@ -110,7 +102,7 @@ public class Game extends Canvas implements Runnable{
 			return;
 		}
 		
-		gameState.render(screen);
+		gameState.render();
 
 		Graphics g = bs.getDrawGraphics();
 		g.fillRect(0, 0, getWidth(), getHeight());
@@ -119,7 +111,7 @@ public class Game extends Canvas implements Runnable{
 		int hh = HEIGHT * SCALE;
 		int xo = (getWidth() - ww) / 2;
 		int yo = (getHeight() - hh) / 2;
-		image = screen.image;
+		image = gameState.getImage();
 		g.drawImage(image, xo, yo, ww, hh, null);
 		g.dispose();
 		bs.show();
