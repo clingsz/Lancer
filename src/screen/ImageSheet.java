@@ -37,21 +37,14 @@ public class ImageSheet {
 				}
 			}
 			
-//			Image imgControlBoard = new ImageIcon("res/pic/controlPanel.jpg").getImage();
-//			ImageBase.put("controlPanel",imgControlBoard);
-//			Image imgChoice = new ImageIcon("res/pic/choice.jpg").getImage();
-//			ImageBase.put("choice",IM.getAlpha(imgChoice));
-//			Image imgCalendar = new ImageIcon("res/pic/calendar.jpg").getImage();
-//			ImageBase.put("calendar",IM.getAlpha(imgCalendar));
-//			ImageBase.put("food",new ImageIcon("res/pic/food.jpg").getImage());
-//			ImageBase.put("population",new ImageIcon("res/pic/population.jpg").getImage());
-//			ImageBase.put("selected",IM.getAlpha(new ImageIcon("res/pic/selected.jpg").getImage()));
 			addImageAlpha("calendar");
 			addImageAlpha("choice");
 			addImageAlpha("selected");
+			addImageAlpha("target");
 			
 			addImage("controlPanel");
 			addImage("food");
+			addImageAlpha("consumption");
 			addImage("population");
 			addImage("energy");
 			addImage("message");
@@ -59,9 +52,6 @@ public class ImageSheet {
 		catch (Exception e){
 			e.printStackTrace();
 		}
-//		ImageMaker IM = new ImageMaker();
-//		img = IM.getAlpha(imgRoad0);
-//		img = IM.getRotate(img[1]);
 	}
 	
 	public void addImage(String name){

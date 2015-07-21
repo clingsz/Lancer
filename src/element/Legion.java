@@ -35,6 +35,9 @@ public class Legion extends WorldUnit{
 		return (energy>0);
 	}
 	
+	
+	
+	
 	public void tick(InputHandler input,World world){
 //		if (energy>0){
 //			int mx = 0;

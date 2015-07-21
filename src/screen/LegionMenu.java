@@ -9,7 +9,7 @@ import element.World;
 public class LegionMenu extends Menu {
 	private Legion legion;
 	public LegionMenu(Legion legion){
-		String[] str = {"Move","Stay","Info","Back"}; 
+		String[] str = {"Move","Attack","Reform","Info","Back"}; 
 		super.setOptions(str);
 		this.legion = legion;
 	}
@@ -17,8 +17,8 @@ public class LegionMenu extends Menu {
 	public void doOption(){
 		switch(selection){
 		case 0: if (legion.canMove()) gameState.moveLegion(legion); break;
-		case 1: break;
-		case 3: doCancel(); break;
+		case 1: if (legion.canMove()) gameState.findAttackTarget(legion); break;
+		case 4: doCancel(); break;
 		}
 	}
 	

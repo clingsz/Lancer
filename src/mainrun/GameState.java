@@ -26,6 +26,8 @@ public class GameState {
 	
 	public boolean worldBrowsing = false;
 	public boolean showMenu = false;
+	public boolean moveLegion = false;
+	
 	
 	public GameState(InputHandler input2){
 		this.input = input2;
@@ -54,11 +56,12 @@ public class GameState {
 	public void resetGame(){
 		world.init(128, 128, input);
 		viewer.init(world);
-		clearMenu();
+		setWorldBrowsing();
 	}
 	
 	public void clearMenu(){
 		menu = null;
+		showMenu = false;
 	}
 	
 	public BufferedImage getImage(){
@@ -75,17 +78,31 @@ public class GameState {
 		}
 	}
 
+	
+	 
 	Legion legion = null;
 	public void moveLegion(Legion legion){
 		clearMenu();
 		this.legion = legion;
+		worldBrowsing = false;
+		moveLegion = true;
 	}
 
+	public void findAttackTarget(Legion legion){
+		clearMenu();
+		worldBrowsing = false;
+		moveLegion = false;
+		this.legion = legion;
+		
+	}
+	
+	
 	public void tick(){
-		if (menu!=null){
+		if (showMenu){
 			menu.tick();
 		}
-		else if (legion!=null){
+		
+		if (moveLegion){
 			int mx = 0;
 			int my = 0;
 			if (input.up.clicked) my = -1;
@@ -97,25 +114,22 @@ public class GameState {
 				viewer.setFocus(world, legion.x, legion.y);
 			}
 			if (input.enter.clicked){
-				legion = null;
 				viewer.clearSelection();
 				setMenu(new WorldMenu());
 			}
 			if (input.cancel.clicked){
-				legion = null;
-				viewer.clearSelection();
+				setWorldBrowsing();
 			}
 			if (input.next.clicked){
-				legion = null;
-				viewer.clearSelection();
 				world.nextDay();
+				setWorldBrowsing();
 			}
 			if (input.select.clicked){
 				setMenu(new LegionMenu(legion));
-				legion = null;
 			}
 		}
-		else{	
+		
+		if (worldBrowsing){	
 			int mx = 0;
 			int my = 0;
 			if (input.up.down) my = -1;
@@ -140,9 +154,20 @@ public class GameState {
 		}
 	}
 	
+	public void setWorldBrowsing(){
+		viewer.clearSelection();
+		worldBrowsing = true;
+		moveLegion = false;
+		clearMenu();
+	}
+	
 	public void setMenu(Menu m){
 		this.menu = m;
 		m.init(input, this);
+		showMenu = true;
+		worldBrowsing = false;
+		moveLegion = false;
+		legion = null;
 	}
 	
 	public void endGame(){

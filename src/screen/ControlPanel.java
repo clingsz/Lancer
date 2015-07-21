@@ -54,8 +54,12 @@ public class ControlPanel {
 		drawImage(screen,4,1,"soldier"+wu.player.id);
 		drawString(screen,5,1,wu.getSoldierNumString());
 
-		drawImage(screen,4,2,"energy");
-		drawString(screen,5,2,wu.energy+"");
+		drawImage(screen,4,2,"consumption");
+		drawString(screen,5,2,wu.getFoodConsumption()+"");
+		
+		
+		drawImage(screen,1,1,"energy");
+		drawString(screen,2,1,wu.energy+"");
 		
 		
 		int c = 0;
@@ -69,13 +73,13 @@ public class ControlPanel {
 		}
 		
 		if (wu instanceof Legion){
-			drawImage(screen,1,1,wu.getImageString());
+			drawImage(screen,0,1,wu.getImageString());
 			Legion wl = (Legion)wu;
 			drawString(screen,0,2,wl.general.lastName + " Legion");
 		}
 		else{
 			City wc = (City)wu;
-			drawImage(screen,1,1,wc.getImageString());
+			drawImage(screen,0,1,wc.getImageString());
 			drawString(screen,0,2,wc.cityName+" City");
 	
 			drawImage(screen,6,2,"population");
