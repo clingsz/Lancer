@@ -17,12 +17,12 @@ public class LegionMenu extends Menu {
 	public void doOption(){
 		switch(selection){
 		case 0: if (legion.canMove()) gameState.moveLegion(legion); break;
-		case 1: if (legion.canMove()) gameState.findAttackTarget(legion); break;
+		case 1: gameState.findAttackTarget(legion); break;
 		case 4: doCancel(); break;
 		}
 	}
 	
 	public void doCancel(){
-		gameState.clearMenu(); gameState.viewer.clearSelection();
+		gameState.setWorldBrowsing();
 	}
 }

@@ -22,7 +22,6 @@ public class RecruitMenu extends Menu {
 	}
 	
 	public void doCancel(){
-		gameState.clearMenu();
-		gameState.viewer.clearSelection();
+		gameState.setWorldBrowsing();
 	}
 }

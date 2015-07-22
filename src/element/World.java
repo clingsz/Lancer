@@ -1,8 +1,5 @@
 package element;
 
-import java.awt.Color;
-import java.awt.Graphics;
-
 import java.awt.*;
 import java.awt.geom.*;
 import java.awt.image.BufferedImage;
@@ -11,6 +8,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Locale;
 
 import javax.swing.JFrame;
@@ -84,7 +82,7 @@ public class World{
 	public boolean isValidToMove(int x, int y, Legion legion){
 		if (!isInWorld(x,y)) return false;
 		if (this.getLegionAt(x,y)!=null) {
-			System.out.println("Legion Block");
+//			System.out.println("Legion Block");
 			return false;
 		}
 		if (this.getCityAt(x,y)!=null && this.getCityAt(x,y).player.id!=legion.player.id) return false;
@@ -209,6 +207,53 @@ public class World{
 		for(Player p : players){
 			p.nextDay();
 		}
+	}
+
+	public ArrayList<Point> getPossibleMove(Legion legion) {
+		ArrayList<Point> temp = new ArrayList<Point>();
+		ArrayList<Integer> e = new ArrayList<Integer>();
+		temp.add(new Point(legion.x,legion.y));
+		e.add(legion.energy);
+		int head = 0;
+		int tail = 1;
+		int nx = 0;
+		int ny = 0;
+		Point p,np;
+		int enow = 0;
+		while(head<tail){
+			p = temp.get(head);
+			enow = e.get(head);
+			if (enow==0) break;
+			for(int i = 1;i<=4;i++){
+				nx = dx[i]+p.x;
+				ny = dy[i]+p.y;
+				np = new Point(nx,ny);
+				if (!temp.contains(np) && this.isValidToMove(nx, ny, legion)){
+//					System.out.println(np);
+					temp.add(np);
+					e.add(enow-1);
+					tail++;
+				}
+			}
+			head++;
+		}
+		return temp;
+	}
+	
+	public ArrayList<WorldUnit> findAttackTarget(Legion legion){
+		ArrayList<WorldUnit> temp = new ArrayList<WorldUnit>();
+		int nx,ny;
+		for (int i = 1;i<=4; i++){
+			nx = dx[i]+legion.x;
+			ny = dy[i]+legion.y;
+			if (this.getLegionAt(nx,ny)!=null && this.getLegionAt(nx,ny).isEnemy(legion)){
+				temp.add(this.getLegionAt(nx,ny));
+			}
+			else if (this.getCityAt(nx,ny)!=null  && this.getCityAt(nx,ny).isEnemy(legion)){
+				temp.add(this.getCityAt(nx,ny));
+			}
+		}
+		return temp;
 	}
 	
 }	

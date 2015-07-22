@@ -35,19 +35,11 @@ public class Legion extends WorldUnit{
 		return (energy>0);
 	}
 	
-	
-	
-	
-	public void tick(InputHandler input,World world){
-//		if (energy>0){
-//			int mx = 0;
-//			int my = 0;
-//			if (input.up.down) my = -1;
-//			if (input.down.down) my = 1;
-//			if (input.left.down) mx = -1;
-//			if (input.right.down) mx = 1;
-//			moveLegion(mx,my,world);
-//		}
+	public void moveTo(int nx,int ny){
+		x=nx;
+		y=ny;
+		player.updateHash();
+		energy = 0;
 	}
 	
 	public void moveLegion(int mx,int my, World world){
@@ -55,17 +47,24 @@ public class Legion extends WorldUnit{
 			x+=mx;
 			y+=my;
 			player.updateHash();
-			System.out.println(energy);
+//			System.out.println(energy);
 			energy--;
 		}
 	}
 	
+	public boolean canAttack(World world){
+		
+		return false;
+	}
+	
 	public void nextDay(){
-		energy = 50;
+		energy = 10;
 	}
 	
 	public void stay(){
 		
 	}
+	
+	
 	
 }

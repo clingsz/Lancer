@@ -7,6 +7,7 @@ import element.City;
 import element.Legion;
 import element.Player;
 import element.World;
+import element.WorldUnit;
 import screen.CityMenu;
 import screen.LegionMenu;
 import screen.Menu;
@@ -24,10 +25,8 @@ public class GameState {
 		
 	int id;
 	
-	public boolean worldBrowsing = false;
-	public boolean showMenu = false;
-	public boolean moveLegion = false;
-	
+	public boolean showWorld = false;
+	public boolean showMenu = false;	
 	
 	public GameState(InputHandler input2){
 		this.input = input2;
@@ -36,14 +35,17 @@ public class GameState {
 	public State state;
 	
 	public enum State{
+		menu,
 		startMenu,
 		worldBrowsing,
 		worldMenu,
 		legionMenu,
 		legionMove,
+		legionAttack,
 		cityMenu,
 		cityRecruit,
-		battleBrowsing
+		battleBrowsing,
+		waitChoice
 	};
 	
 	public Menu menu = null;
@@ -54,7 +56,8 @@ public class GameState {
 	}
 		
 	public void resetGame(){
-		world.init(128, 128, input);
+//		world.init(128, 128, input);
+		world.init(64, 64, input);
 		viewer.init(world);
 		setWorldBrowsing();
 	}
@@ -84,25 +87,27 @@ public class GameState {
 	public void moveLegion(Legion legion){
 		clearMenu();
 		this.legion = legion;
-		worldBrowsing = false;
-		moveLegion = true;
+		state = State.legionMove;
+		viewer.showLegionPossibleMove(world,legion);
 	}
 
 	public void findAttackTarget(Legion legion){
 		clearMenu();
-		worldBrowsing = false;
-		moveLegion = false;
+		viewer.findAttackTarget(world,legion);
+		state = State.legionAttack;
 		this.legion = legion;
-		
 	}
 	
+	public void setWaitChoice(){
+		viewer.renderPossibleMove=false;
+		state = State.waitChoice;
+	}
 	
 	public void tick(){
-		if (showMenu){
+		if (state == State.menu){
 			menu.tick();
 		}
-		
-		if (moveLegion){
+		else if (state == State.legionMove){
 			int mx = 0;
 			int my = 0;
 			if (input.up.clicked) my = -1;
@@ -110,8 +115,7 @@ public class GameState {
 			if (input.left.clicked) mx = -1;
 			if (input.right.clicked) mx = 1;
 			if (mx!=0 || my!=0){
-				legion.moveLegion(mx, my, world);
-				viewer.setFocus(world, legion.x, legion.y);
+				viewer.moveFocus(world,mx,my);
 			}
 			if (input.enter.clicked){
 				viewer.clearSelection();
@@ -125,11 +129,40 @@ public class GameState {
 				setWorldBrowsing();
 			}
 			if (input.select.clicked){
-				setMenu(new LegionMenu(legion));
+				if(viewer.selectTarget()){
+					setWaitChoice();
+				}
 			}
 		}
-		
-		if (worldBrowsing){	
+		else if (state == State.legionAttack){
+			int mx = 0;
+			int my = 0;
+			if (input.up.clicked) my = -1;
+			if (input.down.clicked) my = 1;
+			if (input.left.clicked) mx = -1;
+			if (input.right.clicked) mx = 1;
+			if (mx!=0 || my!=0){
+				viewer.moveFocus(world,mx,my);
+			}
+			if (input.cancel.clicked){
+				setWorldBrowsing();
+			}
+			if (input.select.clicked){
+				if(viewer.selectAttackTarget(world,legion)){
+					setBattle(viewer.getAttackTarget(world));
+				}
+			}
+		}
+		else if (state == State.waitChoice){
+			if (input.cancel.clicked){
+				moveLegion(legion);
+			}
+			else if (input.select.clicked){
+				legion.moveTo(viewer.targetX, viewer.targetY);
+				this.setWorldBrowsing();
+			}
+		}
+		else if (state == State.worldBrowsing){	
 			int mx = 0;
 			int my = 0;
 			if (input.up.down) my = -1;
@@ -154,20 +187,30 @@ public class GameState {
 		}
 	}
 	
+	private void setBattle(WorldUnit attackTarget) {
+		if (attackTarget instanceof City){
+			City ac = (City)(attackTarget);
+			System.out.println(legion.getLegionName()+ " is battling with city " + ac.cityName);
+		}
+		else{
+			Legion al = (Legion)(attackTarget);
+			System.out.println(legion.getLegionName()+ " is battling with legion " + al.getLegionName());
+		}
+	}
+
 	public void setWorldBrowsing(){
 		viewer.clearSelection();
-		worldBrowsing = true;
-		moveLegion = false;
 		clearMenu();
+		showWorld = true;
+		state = State.worldBrowsing;
 	}
 	
 	public void setMenu(Menu m){
 		this.menu = m;
 		m.init(input, this);
 		showMenu = true;
-		worldBrowsing = false;
-		moveLegion = false;
 		legion = null;
+		state = State.menu;
 	}
 	
 	public void endGame(){

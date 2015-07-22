@@ -55,4 +55,8 @@ public abstract class WorldUnit {
 		}
 		return temp;
 	}
+	
+	public boolean isEnemy(WorldUnit w){
+		return (player.isEnemy(w.player));
+	}
 }

@@ -22,6 +22,7 @@ public class CityMenu extends Menu {
 	}
 	
 	public void doCancel(){
-		gameState.clearMenu(); gameState.viewer.clearSelection();
+//		gameState.clearMenu(); gameState.viewer.clearSelection();
+		gameState.setWorldBrowsing();
 	}
 }

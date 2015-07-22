@@ -117,7 +117,7 @@ public class Player{
 	}
 	
 	public boolean isEnemy(Player p){
-		if (p!=this && !p.isNeutral()) return true;
+		if (p!=this) return true;
 		return false;
 	}
 	

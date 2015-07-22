@@ -15,7 +15,7 @@ public class WorldMenu extends Menu {
 			
 	public void doOption(){
 		switch(selection){
-		case 0: gameState.world.nextDay(); gameState.clearMenu(); break;
+		case 0: gameState.world.nextDay(); gameState.setWorldBrowsing(); break;
 		case 1: doCancel(); break;
 		case 2: gameState.resetGame(); break;
 		case 7: gameState.endGame(); break; 
@@ -23,7 +23,7 @@ public class WorldMenu extends Menu {
 	}
 	
 	public void doCancel(){
-		gameState.clearMenu();
+		gameState.setWorldBrowsing();
 	}
 	
 }

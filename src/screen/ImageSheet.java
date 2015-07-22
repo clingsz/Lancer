@@ -41,6 +41,7 @@ public class ImageSheet {
 			addImageAlpha("choice");
 			addImageAlpha("selected");
 			addImageAlpha("target");
+			addImageAlpha("fog");
 			
 			addImage("controlPanel");
 			addImage("food");

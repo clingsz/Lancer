@@ -1,7 +1,9 @@
 package screen;
 
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import element.City;
 import element.Legion;
@@ -22,7 +24,7 @@ public class Viewer {
 //	public Menu startMenu = new StartMenu();
 //	public Menu worldMenu = new WorldMenu();
 	
-	int size = 30;
+	int size = 40;
 	
 	int WORLDHEIGHT;
 	int WORLDWIDTH;
@@ -50,21 +52,61 @@ public class Viewer {
 		menu.render(screen);
 	}
 	
+	public ArrayList<Point> possibleMove;
+	public boolean renderPossibleMove = false;
+	public void showLegionPossibleMove(World world, Legion legion){
+		possibleMove = world.getPossibleMove(legion);
+		renderPossibleMove = true;
+	}
+	
 	public void render(World world){
 			// render world
 			renderTerrian(world);
 			renderUnit(world);
+			if (renderPossibleMove){
+				renderFog(world);
+			}
 			// render controlBoard
 			renderControlBoard(world);
 			// render controlInfo
 			screen.render(getShowX(focusX), getShowY(focusY), size,"choice");
+			
 			if (selectedUnit!=null && shouldDisplay(selectedUnit)){
 				screen.render(getShowX(selectedUnit.x), getShowY(selectedUnit.y), size,"selected");
 			}
+			
+			if (renderTarget){
+				screen.render(getShowX(targetX), getShowY(targetY), size,"target");
+			}
+			
+			if (renderEnemyTarget){
+				for (WorldUnit w : wus){
+					if (shouldDisplay(w)){
+						renderWorldUnit(w,"target");
+					}
+				}
+			}
+			
 	}
 	
 	public void clearSelection(){
 		this.selectedUnit = null;
+		this.renderPossibleMove = false;
+		this.renderTarget = false;
+	}
+	public boolean renderTarget = false;
+	public int targetX,targetY;
+	
+	public boolean selectTarget(){
+		if (this.possibleMove.contains(new Point(focusX,focusY))){
+			targetX = focusX;
+			targetY = focusY;
+			renderTarget = true;
+			return true;
+		}
+		else{
+			return false;
+		}
 	}
 	
 	public Image getMinimap(World w){
@@ -93,6 +135,18 @@ public class Viewer {
 				int ty = screenY+y;
 				if (world.isInWorld(tx,ty)){
 					screen.render(x*size,y*size,size,world.terrian[tx][ty].getImageString());
+				}
+			}
+	}
+	
+	public void renderFog(World world){
+		for (int x = 0; x<=WORLDWIDTH/size; x++)
+			for (int y = 0; y<=WORLDHEIGHT/size; y++){
+				int tx = screenX+x;
+				int ty = screenY+y;
+				Point tp = new Point(tx,ty);
+				if (!this.possibleMove.contains(tp)){
+					screen.render(x*size,y*size,size,"fog");
 				}
 			}
 	}
@@ -169,6 +223,25 @@ public class Viewer {
 	
 	public String getFocusString(){
 		return ("("+focusX+","+focusY+") " + focusTerrian.getTerrianName());
+	}
+
+	public boolean renderEnemyTarget = false;
+	public ArrayList<WorldUnit> wus;
+	public boolean findAttackTarget(World world, Legion legion) {
+		wus = world.findAttackTarget(legion);
+		if (wus.size()>0){
+			renderEnemyTarget = true;
+			return true;
+		}
+		return false;
+	}
+
+	public boolean selectAttackTarget(World world, Legion legion) {
+		return (wus.contains(world.getUnitAt(focusX, focusY)));
+	}
+
+	public WorldUnit getAttackTarget(World world) {
+		return world.getUnitAt(focusX, focusY);
 	}
 	
 	
