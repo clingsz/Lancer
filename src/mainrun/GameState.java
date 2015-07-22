@@ -1,11 +1,9 @@
 package mainrun;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
 import element.City;
 import element.Legion;
-import element.Player;
+import element.Squad;
 import element.World;
 import element.WorldUnit;
 import screen.CityMenu;
@@ -52,6 +50,7 @@ public class GameState {
 	
 	public void init(int w, int h){
 		viewer = new Viewer(w,h);
+		Squad.init();
 		setMenu(new StartMenu());
 	}
 		
