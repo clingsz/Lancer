@@ -29,6 +29,11 @@ public class Player{
 	public HashMap<Point,Legion> hashLegion = new HashMap<Point,Legion>();
 	public HashMap<Point,City> hashCity = new HashMap<Point,City>();
 	
+	public Player(int id){
+		this.id = id;
+		color = playerColor[id];
+	}
+	
 	public Player(World world,int id){
 		name = RandomNameGenerator.getLastName();
 		this.id = id;

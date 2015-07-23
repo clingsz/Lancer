@@ -1,27 +1,46 @@
 package screen;
 
+import java.awt.Point;
 import java.io.IOException;
 
 import mainrun.RandomNameGenerator;
 
 import element.City;
+import element.Legion;
+import element.Player;
 import element.Squad;
 import element.WorldUnit;
 
 public class Battle {
 	boolean attackCity = false;
-	WorldUnit A,B;
+	WorldUnit A[] = new WorldUnit[2];
+	
+	public Battle(){
+		Player p1 = new Player(1);
+		Player p2 = new Player(2);
+		A[0] = new Legion(p1,new Point(1,2));
+		A[1] = new Legion(p2,new Point(1,2));
+	}
+	
 	public Battle(WorldUnit A, WorldUnit B){
 		if (B instanceof City){
 			attackCity = true;
 		}
-		this.A = A;
-		this.B = B;
+		this.A[0] = A;
+		this.A[1] = B;
 	}
 	
+	int w = 7;
+	int h = 7;
+	
+	public static int sx[][] = {{3,1,2,4,5,1,2,3,4,5},{3,1,2,4,5,1,2,3,4,5}};
+	public static int sy[][] = {{6,5,5,5,5,4,4,4,4,4},{0,1,1,1,1,2,2,2,2,2}};
 	
 	public void squadAttack(Squad s1, Squad s2){
 		s1.fightSquad(s2);
+	}
+	
+	public void render(Screen screen){
 		
 	}
 	

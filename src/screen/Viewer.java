@@ -34,6 +34,8 @@ public class Viewer {
 	public WorldUnit selectedUnit = null;
 	public Terrian focusTerrian;
 	
+	int batX,batY,batW,batH,batSize;
+	
 	public Viewer(int w, int h){
 		screen = new Screen(w,h);
 		WORLDHEIGHT = h*3/4;
@@ -41,6 +43,22 @@ public class Viewer {
 		showWidth = (WORLDWIDTH)/size;
 		showHeight = (WORLDHEIGHT)/size;
 		controlPanel = new ControlPanel(0,WORLDHEIGHT,w,h/4);
+		batW = h-30;
+		batH = h-30;
+		batX = (w-batW)/2;
+		batY = (h-batH)/2;
+		batSize = batW/7;
+	}
+	
+	public void renderBattle(Battle b){
+		screen.render(0, 0,screen.w,screen.h,"message");
+		for(int i = 0; i<b.w;i++) for(int j = 0;j<b.h;j++){
+			screen.render(batX+i*batSize, batY+j*batSize, batSize,"grass");
+		}
+		for(int i = 0;i<2;i++) for(int j=0;j<10;j++){
+			screen.render(batX+b.sx[i][j]*batSize, batY+b.sy[i][j]*batSize, batSize,b.A[i].squads.get(j).getImageString());
+			screen.render(batX+(int)((b.sx[i][j]+0.5)*batSize), batY+(b.sy[i][j]+1)*batSize,b.A[i].squads.get(j).getTotalHP()+"");
+		}
 	}
 	
 	public void init(World w){
@@ -59,7 +77,7 @@ public class Viewer {
 		renderPossibleMove = true;
 	}
 	
-	public void render(World world){
+	public void renderWorld(World world){
 			// render world
 			renderTerrian(world);
 			renderUnit(world);

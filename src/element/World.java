@@ -47,7 +47,6 @@ public class World{
 	}
 	
 	public void init(int w, int h, InputHandler in){
-		RandomNameGenerator.init();
 		Width = w;
 		Height = h;
 		input = in;

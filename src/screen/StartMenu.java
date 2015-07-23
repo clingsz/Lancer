@@ -4,7 +4,7 @@ package screen;
 public class StartMenu extends Menu {
 
 	public StartMenu(){
-		String[] str = {"New Game","Load Game","About","Options","Exit"};
+		String[] str = {"New Game","TestBattle","Load Game","About","Options","Exit"};
 		super.setOptions(str);
 		size = 50;
 	}
@@ -17,14 +17,15 @@ public class StartMenu extends Menu {
 			showstr = choices[i];
 			if (i==selection) showstr = ">" + showstr + "<";
 			else showstr = "  " + showstr + "   ";
-			screen.render(screen.w/3,screen.h/3 + (int)(size*(1.2*i)), showstr,30);
+			screen.render(screen.w/3,screen.h/4 + (int)(size*(1.2*i)), showstr,30);
 		}
 	}
 	
 	public void doOption(){
 		switch(selection){
 		case 0: gameState.resetGame(); break;
-		case 4: gameState.endGame(); break;
+		case 1: gameState.setBattle(); break; 
+		case 5: gameState.endGame(); break;
 		}
 	}
 	

@@ -6,6 +6,7 @@ import element.Legion;
 import element.Squad;
 import element.World;
 import element.WorldUnit;
+import screen.Battle;
 import screen.CityMenu;
 import screen.LegionMenu;
 import screen.Menu;
@@ -35,6 +36,7 @@ public class GameState {
 	public enum State{
 		menu,
 		startMenu,
+		testBattle,
 		worldBrowsing,
 		worldMenu,
 		legionMenu,
@@ -48,7 +50,14 @@ public class GameState {
 	
 	public Menu menu = null;
 	
+	public void setBattle(){
+		battle = new Battle();
+		state = State.testBattle;
+		this.renderBattle = true;
+	}
+	
 	public void init(int w, int h){
+		RandomNameGenerator.init();
 		viewer = new Viewer(w,h);
 		Squad.init();
 		setMenu(new StartMenu());
@@ -70,13 +79,21 @@ public class GameState {
 		return viewer.getImage();
 	}
 	
+	public Battle battle = null;
+	
+	boolean renderBattle = false;
 	public void render(){
-		if (!(menu instanceof StartMenu))
-		{
-			viewer.render(world);
+		if (renderBattle){
+			viewer.renderBattle(battle);
 		}
-		if (menu!=null){
-			viewer.renderMenu(menu);
+		else{
+			if (!(menu instanceof StartMenu))
+			{
+				viewer.renderWorld(world);
+			}
+			if (menu!=null){
+				viewer.renderMenu(menu);
+			}
 		}
 	}
 
@@ -172,7 +189,7 @@ public class GameState {
 			viewer.moveFocus(world,mx,my);
 			if (input.select.clicked && viewer.canSelectFocus(world.currentPlayerID)){
 				viewer.selectUnit();
-				viewer.render(world);
+				viewer.renderWorld(world);
 				if (viewer.selectedUnit instanceof City){
 					setMenu(new CityMenu((City)viewer.selectedUnit));
 				}
