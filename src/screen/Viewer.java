@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import element.City;
 import element.Legion;
 import element.Player;
+import element.Squad;
 import element.Terrian;
 import element.World;
 import element.WorldUnit;
@@ -43,22 +44,86 @@ public class Viewer {
 		showWidth = (WORLDWIDTH)/size;
 		showHeight = (WORLDHEIGHT)/size;
 		controlPanel = new ControlPanel(0,WORLDHEIGHT,w,h/4);
-		batW = h-30;
-		batH = h-30;
-		batX = (w-batW)/2;
+		batW = h-80;
+		batH = h-80;
+		batX = (w-batW)/6*5;
 		batY = (h-batH)/2;
 		batSize = batW/7;
 	}
 	
 	public void renderBattle(Battle b){
 		screen.render(0, 0,screen.w,screen.h,"message");
+		int sx,sy;
 		for(int i = 0; i<b.w;i++) for(int j = 0;j<b.h;j++){
 			screen.render(batX+i*batSize, batY+j*batSize, batSize,"grass");
 		}
 		for(int i = 0;i<2;i++) for(int j=0;j<10;j++){
-			screen.render(batX+b.sx[i][j]*batSize, batY+b.sy[i][j]*batSize, batSize,b.A[i].squads.get(j).getImageString());
-			screen.render(batX+(int)((b.sx[i][j]+0.5)*batSize), batY+(b.sy[i][j]+1)*batSize,b.A[i].squads.get(j).getTotalHP()+"");
+			Squad sq = b.A[i].getSquadAtOrder(j);
+			if (sq!=null){
+				screen.render(batX+(int)((b.sx[i][j]+0.8)*batSize), batY+(int)((b.sy[i][j]+0.2)*batSize),j+"");
+				screen.render(batX+b.sx[i][j]*batSize, batY+b.sy[i][j]*batSize, batSize,sq.getImageString());
+				screen.render(batX+(int)((b.sx[i][j]+0.6)*batSize), batY+(int)((b.sy[i][j]+0.9)*batSize),sq.getSoldierNum()+"");
+			}
 		}
+		
+		// render option
+		int optSize = batSize/5*4;
+		for(int i = 0;i<b.battleOptions.length;i++){
+			sx = 10+optSize*i;
+			sy = screen.h/5*4;
+			screen.render(sx,sy,optSize,b.battleOptions[i]);
+			if (i==b.selection && b.selectOrder){
+				screen.render(sx,sy,optSize,"choice");
+			}
+		}
+		// render selected squad
+		if (b.selectSquad>=0){
+			int i = b.getSelectedSquadI();
+			int j = b.getSelectedSquadJ();
+			int ax = batX+b.sx[i][j]*batSize;
+			int ay = batY+b.sy[i][j]*batSize;
+			
+			screen.render(ax,ay, batSize,"selected");
+			
+			i = b.getSelectedSquadTargetI();
+			j = b.getSelectedSquadTargetJ();
+			if (i>=0 && j>=0){
+				int tx = batX+b.sx[i][j]*batSize;
+				int ty = batY+b.sy[i][j]*batSize;
+				screen.render(tx,ty, batSize,"target");
+				screen.drawLine(ax,ay,tx,ty);
+			}
+			Squad sq = b.getSelectedSquad();
+			int solSize = batSize/5*3;
+			if (sq!=null){
+				for (i = 0; i<sq.soldiers.size();i++){
+					int x = 20;
+					int y = 40+solSize*i;
+					screen.render(x,y, solSize,sq.getImageString());
+					screen.render(x+solSize,y+solSize/2, sq.soldiers.get(i).getName());
+					screen.render(x+solSize,y+solSize, sq.soldiers.get(i).getInfo());
+				}
+			}
+		}
+		
+		for(int i =0;i<20;i++){
+			if (b.getSquadAtIndex(i)!=null && b.targets[i]>=0){
+				int a = i/10;
+				int a2 = 1-a;
+				int j = i;
+				if (j>=10) j-=10;
+				int ax = batX+b.sx[a][j]*batSize;
+				int ay = batY+b.sy[a][j]*batSize;
+
+				j = b.targets[i];
+				if (j>=10) j-=10;
+				int tx = batX+b.sx[a2][j]*batSize;
+				int ty = batY+b.sy[a2][j]*batSize;
+				screen.render(tx,ty, batSize,"target");
+				screen.drawLine(ax,ay,tx,ty,batSize);
+			}
+		}
+		
 	}
 	
 	public void init(World w){

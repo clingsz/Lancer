@@ -50,4 +50,10 @@ public class Screen {
 		g.setFont(myFont);
 		g.drawString(dispString, xp, yp);
 	}
+	public void drawLine(int ax, int ay, int tx, int ty) {
+		g.drawLine(ax, ay, tx, ty);
+	}
+	public void drawLine(int ax, int ay, int tx, int ty, int batSize) {
+		g.drawLine(ax+batSize/2, ay+batSize/2, tx+batSize/2, ty+batSize/2);
+	}
 }

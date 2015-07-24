@@ -21,6 +21,7 @@ public class City extends WorldUnit{
 		food = 500;
 		cityName = RandomNameGenerator.getPlaceName();
 		squads.add(new Squad(p));
+		setDefaultOrder();
 	}
 	
 	public String getImageString(){

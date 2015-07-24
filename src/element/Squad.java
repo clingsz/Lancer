@@ -72,18 +72,20 @@ public class Squad{
 		
 		int t2 = 0;
 		int d1[] = new int[l1];
+		int m1[] = new int[l1];
 		int d2[] = new int[l2];
+		int m2[] = new int[l2];
 		
 		int tat = 0;
 		int tdf = 0;
-		
+		int d = 0;
 		for (int i=0;i<l1;i++){
 			t2 = RandGen.getRandomNumber(0, l2-1);
 			tat = (int) Math.ceil((at1+soldiers.get(i).getAT())*(0.5+0.5*soldiers.get(i).HP/100));
 			tdf = (int) Math.ceil((df2 + q.soldiers.get(t2).DF)*(0.5+0.5*q.soldiers.get(t2).HP/100));
-			d2[t2] += Math.max(tat-tdf,1);
-//			t2++;
-//			if (t2>=l2) t2 = 0;
+			d = Math.max(tat-tdf,1);
+			d2[t2] += d;
+			m1[i] = d;
 		}
 		
 		int t1 = 0;
@@ -91,17 +93,19 @@ public class Squad{
 			t1 = RandGen.getRandomNumber(0, l1-1);
 			tat = (int) Math.ceil((at2+q.soldiers.get(i).getAT())*(0.5+0.5*q.soldiers.get(i).HP/100));
 			tdf = (int) Math.ceil((df1 + soldiers.get(t1).DF)*(0.5+0.5*soldiers.get(t1).HP/100));
-			d1[t1] += Math.max(tat-tdf,1);
-			t1++;
-			if (t1>=l1) t1 = 0;
+			d = Math.max(tat-tdf,1);
+			m2[i] = d;
+			d1[t1] += d;
 		}
 		
 		for (int i=0;i<l1;i++){
 			soldiers.get(i).getDamage(d1[i]);
+			soldiers.get(i).makeDamage(m1[i]);
 		}
 		
 		for (int i=0;i<l2;i++){
 			q.soldiers.get(i).getDamage(d2[i]);
+			q.soldiers.get(i).makeDamage(m2[i]);
 		}
 		
 		this.clearSoldier();
@@ -153,12 +157,27 @@ public class Squad{
 		
 	}
 	
+	public Soldier getGeneral(){
+		long max = 0;
+		int maxi = -1;
+		for (int i=0;i<soldiers.size();i++){
+			if (soldiers.get(i).makeDamage>max){
+				max = soldiers.get(i).makeDamage;
+				maxi = i;
+			}
+		}
+		return soldiers.get(maxi);
+	}
+	
 	public void clearSoldier(){
 		ArrayList<Soldier> rest = new ArrayList<Soldier>();
 		
 		for (Soldier s : soldiers){
 			if (!s.isDead()){
 				rest.add(s);
+			}
+			else{
+//				rest.add(new Soldier());
 			}
 		}
 		soldiers = rest;
@@ -182,7 +201,7 @@ public class Squad{
 	}
 	
 	public void showInfo(){
-		System.out.println(this.types[type] + " " + getTotalHP() +"  " + getTotalAT());
+		System.out.println(this.types[type] + " " + getSoldierNum()+" " +getTotalHP() +"  " + getTotalAT());
 		if (this.isDead()){
 			System.out.println("dead ");
 		}
@@ -210,7 +229,25 @@ public class Squad{
 		return temp;
 	}
 	
+	public boolean isDanger(){
+		if (this.getSoldierNum()<=(MAXNUM/4)){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
+	public int requestBackUp(){
+		int temp = MAXNUM-soldiers.size();
+		for(int i = 0;i<temp;i++){
+			soldiers.add(new Soldier());
+		}
+		return temp;
+	}
+	
 	public boolean isDead(){
+		clearSoldier();
 		if (soldiers.size()==0) return true;
 		else return false;
 	}

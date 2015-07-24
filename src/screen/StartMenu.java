@@ -24,7 +24,7 @@ public class StartMenu extends Menu {
 	public void doOption(){
 		switch(selection){
 		case 0: gameState.resetGame(); break;
-		case 1: gameState.setBattle(); break; 
+		case 1: gameState.testBattle(); break; 
 		case 5: gameState.endGame(); break;
 		}
 	}

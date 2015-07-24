@@ -36,7 +36,6 @@ public class GameState {
 	public enum State{
 		menu,
 		startMenu,
-		testBattle,
 		worldBrowsing,
 		worldMenu,
 		legionMenu,
@@ -50,9 +49,10 @@ public class GameState {
 	
 	public Menu menu = null;
 	
-	public void setBattle(){
-		battle = new Battle();
-		state = State.testBattle;
+	public void testBattle(){
+		battle = new Battle(this);
+		state = State.battleBrowsing;
+		battle.testPlay = true;
 		this.renderBattle = true;
 	}
 	
@@ -201,9 +201,24 @@ public class GameState {
 				world.nextDay();
 			}
 		}
+		else if (state==State.battleBrowsing){
+			if (input.up.clicked) battle.prevSelect();
+			if (input.down.clicked) battle.nextSelect();
+			if (battle.selectOrder){
+				if (input.left.clicked) battle.prevSelect();
+				if (input.right.clicked) battle.nextSelect();
+			}
+			else{
+				if (input.left.clicked) battle.nextSelect();
+				if (input.right.clicked) battle.prevSelect();
+			}
+			if (input.tab.clicked) battle.switchSelect();
+			if (input.select.clicked) battle.issueOrder();
+		}
 	}
 	
 	private void setBattle(WorldUnit attackTarget) {
+		state = State.battleBrowsing;
 		if (attackTarget instanceof City){
 			City ac = (City)(attackTarget);
 			System.out.println(legion.getLegionName()+ " is battling with city " + ac.cityName);
@@ -212,6 +227,10 @@ public class GameState {
 			Legion al = (Legion)(attackTarget);
 			System.out.println(legion.getLegionName()+ " is battling with legion " + al.getLegionName());
 		}
+		battle = new Battle(this,legion,attackTarget);
+		this.renderBattle = true;
+		this.showMenu = false;
+		this.showWorld = false;
 	}
 
 	public void setWorldBrowsing(){
@@ -219,6 +238,7 @@ public class GameState {
 		clearMenu();
 		showWorld = true;
 		state = State.worldBrowsing;
+		this.renderBattle = false;
 	}
 	
 	public void setMenu(Menu m){

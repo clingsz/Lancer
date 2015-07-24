@@ -10,15 +10,26 @@ import screen.Screen;
 
 
 public class Legion extends WorldUnit{
-	public static final int MAXNUM = 16;
-	public Soldier general;
+
+		
 	public Legion(Player p, Point np){
 		super(p, np);
-		for(int i = 0; i<MAXNUM; i++){
-			squads.add(new Squad(p));
-		}
-		general = new Soldier();
+		createStandardSquads();
+		setDefaultOrder();
 	}
+	
+	public void createRandomSquads(){
+		for(int i = 0; i<MAXNUM; i++){
+			squads.add(new Squad(this.player));
+		}
+	}
+	
+	public static int standard[] = {2,1,1,1,0,0,0,0,0,0};
+	public void createStandardSquads(){
+		for(int i = 0; i<MAXNUM; i++){
+			squads.add(new Squad(this.player,standard[i]));
+		}
+		}
 	
 	public String getLegionName(){
 		return general.lastName;
@@ -65,6 +76,5 @@ public class Legion extends WorldUnit{
 		
 	}
 	
-	
-	
+		
 }

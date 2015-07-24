@@ -8,10 +8,11 @@ public class Soldier {
 	public String lastName;
 	public int HP;
 	public static int MAXHP = 100;
-	public int kills = 0;
+	public long makeDamage = 1;
 	public int age = 20;
 	public int AT,DF,LD;
 		
+	public int level = 0;
 	
 	public Soldier(){
 		firstName = RandomNameGenerator.getFirstName();
@@ -21,14 +22,31 @@ public class Soldier {
 		DF = RandGen.getRandomNumber(0, 5);
 		LD = 0;
 	}
-	
-	public void upgrade(){
-		kills++;
-		if (RandGen.getRandomNumber(0, 10)>6){
-			AT++;
+
+	public static int LEVELT = 10;
+	public static int MAXLEVEL = 100;
+	public void makeDamage(int d){
+//		long increasedLevel = (makeDamage+d)/LEVELT - (makeDamage)/LEVELT;
+		int increasedLevel = calcLevel(makeDamage+d) - level;
+		while (increasedLevel>0){
+			upgrade();
+			increasedLevel--;
 		}
-		else{
-			DF++;
+		makeDamage+=d;
+	}
+	
+	public int calcLevel(long d){
+		return (int)(Math.log(d/LEVELT)/Math.log(2));
+	}
+	public void upgrade(){
+		if (this.getLevel()<MAXLEVEL){
+			level++;
+			if (RandGen.getRandomNumber(0, 10)>3){
+				AT++;
+			}
+			else{
+				DF++;
+			}
 		}
 	}
 	
@@ -37,16 +55,32 @@ public class Soldier {
 	}
 	
 	public void getDamage(int d){
-		HP-=d;
+		if (d==0){
+			HP = Math.min(MAXHP,HP + 1);
+		}
+		else{
+			HP-=d;
+		}
 	}
 	
 	public boolean isDead(){
 		return (HP<=0);
 	}
 	
+	public String getInfo(){
+		return ("HP:"+HP + " AT:" + AT + " DF:"+DF);
+	}
+	
+	public String getName(){
+		return (firstName + "." + lastName + " LV" + level);
+	}
+	
 	public void showInfo(){
-//		System.out.print(HP+"/"+AT+"/"+DF+" ");
-		System.out.print(HP+" ");
+		System.out.print(HP+"/"+AT+"/"+DF+"-LV"+getLevel()+"  ");
+//		System.out.print(HP+" ");
+	}
+	public int getLevel(){
+		return level;
 	}
 	
 }

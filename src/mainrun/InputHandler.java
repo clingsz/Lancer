@@ -50,6 +50,7 @@ public class InputHandler implements KeyListener, MouseListener{
 	public Key select = new Key();
 	public Key enter = new Key();
 	public Key cancel = new Key();
+	public Key tab = new Key();
 	public InputHandler(Game game){
 		game.addKeyListener(this);
 		game.addMouseListener(this);
@@ -99,6 +100,9 @@ public class InputHandler implements KeyListener, MouseListener{
 		if (ke.getKeyCode() == KeyEvent.VK_ENTER) enter.toggle(pressed);
 		if (ke.getKeyCode() == KeyEvent.VK_SPACE) select.toggle(pressed);
 		if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) cancel.toggle(pressed);
+		if (ke.getKeyCode() == KeyEvent.VK_L) {
+			tab.toggle(pressed);
+		}
 	}
 	
 	@Override

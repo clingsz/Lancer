@@ -43,6 +43,11 @@ public class ImageSheet {
 			addImageAlpha("target");
 			addImageAlpha("fog");
 			
+			addImage("attack");
+			addImage("retreat");
+			addImage("defend");
+			addImage("exit");
+			
 			addImage("controlPanel");
 			addImage("food");
 			addImageAlpha("consumption");

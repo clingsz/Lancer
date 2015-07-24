@@ -13,13 +13,27 @@ public abstract class WorldUnit {
 	public Player player;
 	public int energy = 10;
 	public ArrayList<Squad> squads = new ArrayList<Squad>();
+	public static final int MAXNUM = 10;
+	public Squad[] order = new Squad[MAXNUM];
 	public int food = 1000;
+	public Soldier general;
+	
 	public WorldUnit(Player p, Point np){
 		x = np.x;
 		y = np.y;
 		player = p;
 		energy = 10;
 	}
+	
+
+	public void setDefaultOrder(){
+		for(int i = 0; i<squads.size(); i++){
+			order[i] = squads.get(i);
+		}
+		general = order[0].getGeneral();
+	}
+	
+	
 	public String getImageString(){
 		return null;
 	}
@@ -59,4 +73,29 @@ public abstract class WorldUnit {
 	public boolean isEnemy(WorldUnit w){
 		return (player.isEnemy(w.player));
 	}
+
+
+	public Squad getSquadAtOrder(int j) {
+		return order[j];
+	}
+	
+	public void clearSquad(){
+		for(int i = 0;i<MAXNUM;i++){
+			if (order[i]!=null && order[i].isDead()){
+				squads.remove(order[i]);
+				order[i] = null;
+			}
+		}
+	}
+	
+	public int getTotalSquad(){
+		int cnt = 0;
+		for(int i = 0;i<MAXNUM;i++){
+			if (order[i]!=null){
+				cnt ++;
+			}
+		}
+		return cnt;
+	}
+	
 }
