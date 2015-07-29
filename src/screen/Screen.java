@@ -56,4 +56,7 @@ public class Screen {
 	public void drawLine(int ax, int ay, int tx, int ty, int batSize) {
 		g.drawLine(ax+batSize/2, ay+batSize/2, tx+batSize/2, ty+batSize/2);
 	}
+	public void render(int xp, int yp, int nw,int nh, Image img) {
+		g.drawImage(img,xp,yp,nw,nh, null);
+	}
 }

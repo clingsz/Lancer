@@ -6,7 +6,7 @@ import element.World;
 import element.WorldUnit;
 
 
-public class ControlPanel {
+public class ControlPanel extends Vobject{
 	public int miniMapBorder,miniMapSize;
 	public int size = 30;
 	
@@ -20,29 +20,27 @@ public class ControlPanel {
 	public int squadPosY = 5;
 		
 	public int topborder,leftborder;
-	public int xos,yos,Width,Height;
+
+	Minimap minimap;
+	
 	public ControlPanel(int nx, int ny, int nw, int nh){
-		xos = nx;
-		yos = ny;
-		Width = nw;
-		Height = nh;
-		
+		super(nx,ny,nw,nh);
 		topborder = 10;
 		leftborder = 100;
 		miniMapBorder = 16;
-		miniMapSize = (Height-miniMapBorder*2);
+		miniMapSize = (height-miniMapBorder*2);
+		minimap = new Minimap(x+miniMapBorder,y+miniMapBorder,miniMapSize,miniMapSize);
 	}
 	
 	public void render(Screen screen, World world, Viewer v){
+		screen.render(x,y,width,height,"controlPanel");
+		minimap.render(screen, v, world);
+				
+		screen.render(5,y,15,"calendar");
+		screen.render(21,y+12,world.getDate());
 		
-		screen.render(xos,yos,Width,Height,"controlPanel");
-		screen.render(5, yos+miniMapBorder, miniMapSize, v.getMinimap(world));
-		
-		screen.render(5,yos,15,"calendar");
-		screen.render(21,yos+12,world.getDate());
-		
-		screen.render(21,yos+Height-3, v.getFocusString());
-		screen.render(5,yos+Height-15,15,v.focusTerrian.getImageString());
+		screen.render(21,y+height-3, v.getFocusString());
+		screen.render(5,y+height-15,15,v.focusTerrian.getImageString());
 		
 	}
 	
@@ -87,17 +85,14 @@ public class ControlPanel {
 		}
 	}
 	
-	public void drawImage(Screen screen,int x,int y, String imgString){
-		screen.render(x*size+leftborder,yos+y*size+topborder, size, size, imgString);
+	public void drawImage(Screen screen,double px,double py, String imgString){
+		screen.render((int)(px*size)+leftborder,y+(int)(py*size+topborder), size, size, imgString);
 	}
-	public void drawImage(Screen screen,double x,double y, String imgString){
-		screen.render((int)(x*size)+leftborder,yos+(int)(y*size+topborder), size, size, imgString);
+	public void drawString(Screen screen,double px,double py, String info){
+		screen.render((int)((px+0.2)*size)+leftborder,y+(int)((py+0.6)*size)+topborder,info);
 	}
-	public void drawString(Screen screen,double x,double y, String info){
-		screen.render((int)((x+0.2)*size)+leftborder,yos+(int)((y+0.6)*size)+topborder,info);
-	}
-	public void drawString(Screen screen,double x,double y, String info,int Fontsize){
-		screen.render((int)((x+0.2)*size)+leftborder,yos+(int)((y+0.6)*size)+topborder,info,Fontsize);
+	public void drawString(Screen screen,double px,double py, String info,int Fontsize){
+		screen.render((int)((px+0.2)*size)+leftborder,y+(int)((py+0.6)*size)+topborder,info,Fontsize);
 	}
 	
 }
