@@ -12,6 +12,8 @@ import java.util.List;
 import javax.swing.JFrame;
 
 public class InputHandler implements KeyListener, MouseListener{
+	public GameState g;
+	
 	public class Key {
 		public int presses, absorbs;
 		public boolean down, clicked;
@@ -51,9 +53,15 @@ public class InputHandler implements KeyListener, MouseListener{
 	public Key enter = new Key();
 	public Key cancel = new Key();
 	public Key tab = new Key();
+	public Key mouse = new Key();
+	
 	public InputHandler(Game game){
 		game.addKeyListener(this);
 		game.addMouseListener(this);
+	}
+	
+	public void linkGameState(GameState g){
+		 this.g = g;
 	}
 	
 	
@@ -109,10 +117,22 @@ public class InputHandler implements KeyListener, MouseListener{
 	public void keyTyped(KeyEvent arg0) {
 		
 	}
-	@Override
+	
+	public int clickX = -1;
+	public int clickY = -1;
+	public boolean mouseClicked = false;
+	
 	public void mouseClicked(MouseEvent arg0) {
-		
+		if (arg0.getButton() == MouseEvent.BUTTON1){
+			g.viewer.click(arg0.getX(),arg0.getY());
+		}
 	}
+	
+
+	public void releaseMouseClicked(){
+		mouseClicked = false;
+	}
+	
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
 		
@@ -123,10 +143,16 @@ public class InputHandler implements KeyListener, MouseListener{
 	}
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-		
+		if (arg0.getButton() == 1){
+			mouse.toggle(true);
+			clickX = arg0.getX();
+			clickY = arg0.getY();
+		}
 	}
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
-		
+		if (arg0.getButton() == 1){
+			mouse.toggle(false);
+		}
 	}
 }

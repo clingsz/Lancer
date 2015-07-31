@@ -7,7 +7,7 @@ public class Minimap extends Vobject{
 		super(nx,ny,nw,nh);
 	}
 	
-	public void render(Screen screen, Viewer v, World world){
-		screen.render(x,y,width,height,v.getMinimap(world));
+	public void render(Screen screen, Worldviewer wv){
+		screen.render(x,y,width,height,wv.getMinimap());
 	}
 }

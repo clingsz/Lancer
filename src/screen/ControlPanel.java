@@ -32,18 +32,17 @@ public class ControlPanel extends Vobject{
 		minimap = new Minimap(x+miniMapBorder,y+miniMapBorder,miniMapSize,miniMapSize);
 	}
 	
-	public void render(Screen screen, World world, Viewer v){
+	public void render(Screen screen, Worldviewer wv){
 		screen.render(x,y,width,height,"controlPanel");
-		minimap.render(screen, v, world);
+		minimap.render(screen, wv);
 				
 		screen.render(5,y,15,"calendar");
-		screen.render(21,y+12,world.getDate());
+		screen.render(21,y+12,wv.getDate());
 		
-		screen.render(21,y+height-3, v.getFocusString());
-		screen.render(5,y+height-15,15,v.focusTerrian.getImageString());
-		
+		screen.render(21,y+height-3, wv.getFocusString());
+		screen.render(5,y+height-15,15,wv.focusTerrian.getImageString());
 	}
-	
+		
 	public void renderUnitInfo(Screen screen,WorldUnit wu){
 		drawString(screen,0,0,wu.player.name + " Family");
 		drawImage(screen,4,0,"food");

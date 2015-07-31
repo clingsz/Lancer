@@ -4,33 +4,26 @@ import mainrun.InputHandler;
 import element.World;
 
 
-public class Menu {
+public class Menu extends Vobject{
 	
 	int selection = 0;
 	String choices[];
 	int size = 20;
-	int h = 0;
-	int w = 8*size;
 	int xoffset = 100;
 	int yoffset = 100;
 	
 	InputHandler input;
 	GameState gameState;
 	
-	public Menu(){
-		
+	public Menu(int x, int y, int w, int h){
+		super(x,y,w,h);
 	}
 	
 	public void init(InputHandler input, GameState gameState){
 		this.input = input;
 		this.gameState = gameState;
 	}
-	
-	public void setOptions(String newchoice[]){
-		choices = newchoice;
-		h = (choices.length+3)*size;
-	}
-	
+
 	public int getSelection(){
 		return selection;
 	}
@@ -46,7 +39,7 @@ public class Menu {
 	}
 	
 	public void render(Screen screen){
-		screen.render(xoffset,yoffset, w, h, "message");
+		screen.render(xoffset,yoffset, width, height, "message");
 		String showstr = "";
 		
 		for (int i = 0; i<choices.length; i++){

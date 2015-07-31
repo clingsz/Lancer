@@ -16,7 +16,7 @@ public class Vobject {
 		return false;
 	}
 
-	public void click(){
+	public void click(int mx, int my){
 		
 	}
 	

@@ -29,7 +29,7 @@ public class Game extends Canvas implements Runnable{
 	private int tickCount = 0;
 
 	
-	InputHandler input = new InputHandler(this);
+	InputHandler input;
 	GameState gameState = new GameState(input);
 	boolean running = false;	
 	
@@ -39,7 +39,10 @@ public class Game extends Canvas implements Runnable{
 	}
 	
 	public void start(){
+		input = new InputHandler(this);
+		gameState = new GameState(input);
 		gameState.init(WIDTH,HEIGHT);
+		input.linkGameState(gameState);
 		running = true;
 		new Thread(this).start();
 	}
@@ -60,7 +63,7 @@ public class Game extends Canvas implements Runnable{
 			boolean shouldRender = false;
 			while (unprocessed >= 1) {
 				ticks++;
-				tick();
+//				tick();
 				unprocessed -= 1;
 				shouldRender = true;
 			}
@@ -84,15 +87,15 @@ public class Game extends Canvas implements Runnable{
 		}
 	}
 
-	public void tick() {
-		tickCount++;
-		if (!hasFocus()) {
-			input.releaseAll();
-		} else {
-			input.tick();
-			gameState.tick();
-		}		
-	}
+//	public void tick() {
+//		tickCount++;
+//		if (!hasFocus()) {
+//			input.releaseAll();
+//		} else {
+//			input.tick();
+//			gameState.tick();
+//		}		
+//	}
 	
 	public void render(){
 		BufferStrategy bs = getBufferStrategy();
