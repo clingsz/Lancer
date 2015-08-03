@@ -24,25 +24,16 @@ public class GameState {
 	
 	public Battle battle = null;
 	public Legion legion = null;
-	public State state;
-	
-		
+			
 	int id;
 	
 	public GameState(InputHandler input2){
 		this.input = input2;
 	}
-	
-	public enum State{
-		startMenu,
-		world,
-		battle
-	};
-	
+			
 	public void testBattle(){
 		battle = new Battle(this);
 		battle.testPlay = true;
-		state = State.battle;
 	}
 	
 	public void init(int w, int h){

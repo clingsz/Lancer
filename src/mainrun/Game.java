@@ -15,6 +15,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 import screen.Screen;
+import screen.Viewer;
 
 public class Game extends Canvas implements Runnable{
 	

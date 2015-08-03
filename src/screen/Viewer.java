@@ -24,6 +24,12 @@ public class Viewer {
 	Battleviewer battleviewer;
 	InputHandler input;
 	GameState gameState;
+	public State state;
+	public enum State{
+		startMenu,
+		world,
+		battle
+	};
 	
 	public Menu menu;
 	public StartMenu startMenu;
@@ -41,10 +47,16 @@ public class Viewer {
 	
 	public void setStartMenu(){
 		menu = startMenu;
+		state = State.startMenu;
 	}
 		
 	public void setWorld(World w){
 		worldviewer.init(w);
+		state = State.world;
+	}
+	
+	public void setBattle(Battle b){
+		state = State.battle;
 	}
 	
 	public void render(GameState g){
