@@ -2,6 +2,7 @@ package screen;
 
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 import element.City;
@@ -10,6 +11,7 @@ import element.Player;
 import element.Terrian;
 import element.World;
 import element.WorldUnit;
+import mainrun.InputHandler;
 
 public class Worldviewer extends Vobject{
 	int focusX =-1,focusY =-1;
@@ -232,6 +234,29 @@ public class Worldviewer extends Vobject{
 	
 	public String getDate(){
 		return world.getDate();
+	}
+
+	public void keyPress(InputHandler input) {
+		int dy = 0,dx = 0;
+		if (input.down.clicked){
+			dy = 1;
+		}
+		else if (input.up.clicked){
+			dy = -1;
+		}
+		else if (input.left.clicked){
+			dx = -1;
+		}
+		else if (input.right.clicked){
+			dx = 1;
+		}
+		this.moveFocus(dx, dy);
+	}
+	
+	public void click(int mx, int my){
+		int px = (mx-x)/size;
+		int py = (my-y)/size;
+		this.setFocus(screenX+px, screenY+py);
 	}
 
 	

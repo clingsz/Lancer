@@ -3,8 +3,6 @@ package screen;
 import java.awt.Point;
 import java.io.IOException;
 import java.util.ArrayList;
-
-import mainrun.GameState;
 import mainrun.RandomNameGenerator;
 
 import element.City;
@@ -15,27 +13,27 @@ import element.WorldUnit;
 
 public class Battle {
 	boolean attackCity = false;
-	GameState gameState;
+	Viewer viewer;
 	public boolean testPlay = false;
 	
 	WorldUnit A[] = new WorldUnit[2];
 	
-	public Battle(GameState g){
+	public Battle(Viewer viewer){
 		Player p1 = new Player(1);
 		Player p2 = new Player(2);
 		A[0] = new Legion(p1,new Point(1,2));
 		A[1] = new Legion(p2,new Point(1,2));
-		gameState = g;
+		this.viewer = viewer;
 		init();
 	}
 	
-	public Battle(GameState g,WorldUnit A, WorldUnit B){
+	public Battle(Viewer viewer,WorldUnit A, WorldUnit B){
 		if (B instanceof City){
 			attackCity = true;
 		}
 		this.A[0] = A;
 		this.A[1] = B;
-		gameState = g;
+		this.viewer = viewer;
 		init();
 	}
 	public boolean graph[][] = new boolean[20][20];
@@ -181,8 +179,8 @@ public class Battle {
 			switch(selection){
 			case 0: makeAttack(0); break; //attack
 			case 1: break; //defend
-			case 2: gameState.setWorldBrowsing(); break; //retreat
-			case 3: gameState.endGame(); break; //system
+			case 2: viewer.setWorld(); break; //retreat
+			case 3: viewer.endGame(); break; //system
 			}
 		}
 	}

@@ -30,8 +30,8 @@ public class Game extends Canvas implements Runnable{
 	private int tickCount = 0;
 
 	
-	InputHandler input;
-	GameState gameState = new GameState(input);
+	Viewer viewer;
+	
 	boolean running = false;	
 	
 	
@@ -40,10 +40,7 @@ public class Game extends Canvas implements Runnable{
 	}
 	
 	public void start(){
-		input = new InputHandler(this);
-		gameState = new GameState(input);
-		gameState.init(WIDTH,HEIGHT);
-		input.linkGameState(gameState);
+		viewer = new Viewer(WIDTH,HEIGHT,this);
 		running = true;
 		new Thread(this).start();
 	}
@@ -106,7 +103,7 @@ public class Game extends Canvas implements Runnable{
 			return;
 		}
 		
-		gameState.render();
+		viewer.render();
 
 		Graphics g = bs.getDrawGraphics();
 		g.fillRect(0, 0, getWidth(), getHeight());
@@ -115,7 +112,7 @@ public class Game extends Canvas implements Runnable{
 		int hh = HEIGHT * SCALE;
 		int xo = (getWidth() - ww) / 2;
 		int yo = (getHeight() - hh) / 2;
-		image = gameState.getImage();
+		image = viewer.getImage();
 		g.drawImage(image, xo, yo, ww, hh, null);
 		g.dispose();
 		bs.show();

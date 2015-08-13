@@ -13,8 +13,6 @@ import java.util.Locale;
 
 import javax.swing.JFrame;
 
-import mainrun.GameState;
-import mainrun.GameState.State;
 import mainrun.InputHandler;
 import mainrun.RandGen;
 import mainrun.RandomNameGenerator;

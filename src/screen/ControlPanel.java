@@ -23,24 +23,34 @@ public class ControlPanel extends Vobject{
 
 	Minimap minimap;
 	
-	public ControlPanel(int nx, int ny, int nw, int nh){
+	public ControlPanel(int nx, int ny, int nw, int nh, Worldviewer wv){
 		super(nx,ny,nw,nh);
 		topborder = 10;
 		leftborder = 100;
 		miniMapBorder = 16;
 		miniMapSize = (height-miniMapBorder*2);
-		minimap = new Minimap(x+miniMapBorder,y+miniMapBorder,miniMapSize,miniMapSize);
+		minimap = new Minimap(x+miniMapBorder,y+miniMapBorder,miniMapSize,miniMapSize, wv);
 	}
 	
 	public void render(Screen screen, Worldviewer wv){
 		screen.render(x,y,width,height,"controlPanel");
-		minimap.render(screen, wv);
+		minimap.render(screen);
 				
 		screen.render(5,y,15,"calendar");
 		screen.render(21,y+12,wv.getDate());
 		
 		screen.render(21,y+height-3, wv.getFocusString());
 		screen.render(5,y+height-15,15,wv.focusTerrian.getImageString());
+		
+		if (wv.focusUnit!=null){
+			renderUnitInfo(screen,wv.focusUnit);
+		}
+	}
+	
+	public void click(int mx,int my){
+		if (this.minimap.isInRegion(mx, my)){
+			minimap.click(mx, my);
+		}
 	}
 		
 	public void renderUnitInfo(Screen screen,WorldUnit wu){

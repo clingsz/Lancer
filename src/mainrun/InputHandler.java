@@ -11,8 +11,10 @@ import java.util.List;
 
 import javax.swing.JFrame;
 
+import screen.Viewer;
+
 public class InputHandler implements KeyListener, MouseListener{
-	public GameState g;
+	public Viewer viewer;
 	
 	public class Key {
 		public int presses, absorbs;
@@ -22,15 +24,17 @@ public class InputHandler implements KeyListener, MouseListener{
 			keys.add(this);
 		}
 
-		public void toggle(boolean pressed) {
-			if (pressed != down) {
-				down = pressed;
-			}
-			if (pressed) {
-				presses++;
-			}
+//		public void toggle(boolean pressed) {
+//			if (pressed != down) {
+//				down = pressed;
+//			}
+//			if (pressed) {
+//				presses++;
+//			}
+//		}
+		public void toggle(boolean b){
+			clicked = b;
 		}
-
 		public void tick() {
 			if (absorbs < presses) {
 				absorbs++;
@@ -60,8 +64,9 @@ public class InputHandler implements KeyListener, MouseListener{
 		game.addMouseListener(this);
 	}
 	
-	public void linkGameState(GameState g){
-		 this.g = g;
+	public void linkViewer(Viewer viewer){
+		 this.viewer = viewer;
+
 	}
 	
 	
@@ -69,6 +74,7 @@ public class InputHandler implements KeyListener, MouseListener{
 	
 	public void keyPressed(KeyEvent ke) {
 		toggle(ke,true);
+		viewer.keyPress();
 	}
 	public void keyReleased(KeyEvent ke) {
 		toggle(ke,false);
@@ -88,7 +94,7 @@ public class InputHandler implements KeyListener, MouseListener{
 	}
 	public void releaseAll() {
 		for (int i = 0; i < keys.size(); i++) {
-			keys.get(i).down = false;
+			keys.get(i).clicked = false;
 		}
 	}
 	
@@ -124,7 +130,7 @@ public class InputHandler implements KeyListener, MouseListener{
 	
 	public void mouseClicked(MouseEvent arg0) {
 		if (arg0.getButton() == MouseEvent.BUTTON1){
-			g.viewer.click(arg0.getX(),arg0.getY());
+			viewer.click(arg0.getX(),arg0.getY());
 		}
 	}
 	

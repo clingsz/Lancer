@@ -1,7 +1,5 @@
 package screen;
-import mainrun.GameState;
 import mainrun.InputHandler;
-import element.World;
 
 
 public class Menu extends Vobject{
@@ -13,15 +11,15 @@ public class Menu extends Vobject{
 	int yoffset = 100;
 	
 	InputHandler input;
-	GameState gameState;
+	Viewer viewer;
 	
 	public Menu(int x, int y, int w, int h){
 		super(x,y,w,h);
 	}
 	
-	public void init(InputHandler input, GameState gameState){
-		this.input = input;
-		this.gameState = gameState;
+	public void init(Viewer viewer){
+		this.input = viewer.input;
+		this.viewer = viewer;
 	}
 
 	public int getSelection(){

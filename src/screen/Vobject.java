@@ -11,8 +11,8 @@ public class Vobject {
 		height = nh;
 	}
 		
-	public boolean isInRegion(int tx,int ty){
-		if (tx>x && tx<x+width && ty>y && ty<y+height) return true;
+	public boolean isInRegion(int mx,int my){
+		if (mx>x && mx<x+width && my>y && my<y+height) return true;
 		return false;
 	}
 
@@ -20,7 +20,5 @@ public class Vobject {
 		
 	}
 	
-	public void render(Screen screen){
-		
-	}
+	
 }

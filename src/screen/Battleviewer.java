@@ -5,6 +5,8 @@ import element.Squad;
 public class Battleviewer extends Vobject{
 	int batX,batY,batW,batH,batSize;
 	
+	Battle b;
+	
 	public Battleviewer(int nx, int ny, int nw, int nh) {
 		super(nx, ny, nw, nh);
 		batW = nh-80;
@@ -14,7 +16,7 @@ public class Battleviewer extends Vobject{
 		batSize = batW/7;
 	}
 
-	public void renderBattle(Screen screen, Battle b){
+	public void renderBattle(Screen screen){
 		screen.render(0, 0,screen.w,screen.h,"message");
 		int sx,sy;
 		for(int i = 0; i<b.w;i++) for(int j = 0;j<b.h;j++){

@@ -1,8 +1,6 @@
 package screen;
 
 import java.util.ArrayList;
-
-import mainrun.GameState;
 import mainrun.InputHandler;
 
 
@@ -10,9 +8,9 @@ public class StartMenu extends Menu {
 
 	ArrayList<Vbutton> btns = new ArrayList<Vbutton>();
 	
-	public StartMenu(Screen s, InputHandler input, GameState gameState){
-		super(0,0,s.w,s.h);
-		super.init(input, gameState);
+	public StartMenu(Viewer viewer){
+		super(0,0,viewer.screen.w,viewer.screen.h);
+		super.init(viewer);
 		String[] str = {"NewGame","TestBattle","LoadGame","About","Options","Exit"};
 		size = 50;
 		for(int i = 0; i < str.length;i++){
@@ -37,9 +35,9 @@ public class StartMenu extends Menu {
 	
 	public void doOption(int selection){
 		switch(selection){
-		case 0: gameState.resetGame(); break;
-		case 1: gameState.testBattle(); break; 
-		case 5: gameState.endGame(); break;
+		case 0: viewer.resetGame(); break;
+		case 1: viewer.testBattle(); break; 
+		case 5: viewer.endGame(); break;
 		}
 	}
 	
